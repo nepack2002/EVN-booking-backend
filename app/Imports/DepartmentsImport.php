@@ -23,12 +23,8 @@ class UsersImport implements ToCollection, WithHeadingRow
             ]);
 
             if ($validator->fails()) {
-                // Xử lý lỗi
-                // Ví dụ: Log lỗi hoặc thông báo lỗi cho người dùng
                 continue; // Bỏ qua dữ liệu không hợp lệ và tiếp tục với dữ liệu tiếp theo
             }
-
-            // Tạo bản ghi mới
             Department::create([
                 'name' => $row['name'],
                 'parent_id' => $row['parent_id'],

@@ -54,5 +54,19 @@ class DepartmentController extends Controller
 
         return response()->json("Thành công");
     }
+    public function import(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|mimes:xls,xlsx'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        Excel::import(new DepartmentsImport, $request->file('file'));
+
+        return response()->json(['success' => true]);
+    }
     
 }
