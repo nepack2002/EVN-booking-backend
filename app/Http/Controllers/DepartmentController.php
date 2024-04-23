@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use Illuminate\Http\Request;
-
+use App\Imports\DepartmentsImport;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 class DepartmentController extends Controller
 {
     //lấy full
