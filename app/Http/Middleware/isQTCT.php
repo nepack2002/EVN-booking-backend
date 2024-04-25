@@ -15,8 +15,8 @@ class isQTCT
      */
     public function handle(Request $request, Closure $next): Response
     {
-       if ($request->user() && ($request->user()->isQTCTC() || $request->user()->isAdmin())) {
-             return $next($request);
+        if ($request->user() && ($request->user()->isQTCT() || $request->user()->isAdmin())) {
+            return $next($request);
         }
         return response()->json(['error' => 'Unauthorized'], 403);
     }

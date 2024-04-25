@@ -24,6 +24,8 @@ return new class extends Migration
             $table->date('ngay_bao_duong_gan_nhat')->nullable();
             $table->date('han_dang_kiem_tiep_theo')->nullable();
             $table->string('anh_xe')->nullable();
+            $table->float('lat_location')->nullable();
+            $table->float('long_location')->nullable();
             $table->timestamps();
         });
     }

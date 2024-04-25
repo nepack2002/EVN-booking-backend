@@ -18,11 +18,6 @@ use App\Http\Controllers\ForgotPasswordController;
 |
 */
 
-// Route::get('car/import', [CarsController::class, 'index1']);
-// Route::get('/', [UsersController::class, 'getUser']);
-// Route::post('car/import', [CarsController::class, 'import']);Route::get('/reset-password', [ForgotPasswordController::class, 'viewResetpassword'])->name('reset-password');
-
-
-
-Route::post('/reset', [ForgotPasswordController::class, 'resetpassword'])->name('password.reset');
-Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'viewResetpassword'])->name('reset-password');
+Route::get('/forgot', function () {
+    return view('forgot');
+});

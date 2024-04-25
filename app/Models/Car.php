@@ -14,4 +14,7 @@ class Car extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function schedule(){
+        return $this->hasMany(Schedule::class, 'car_id');
+    }
 }

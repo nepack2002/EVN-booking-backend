@@ -32,32 +32,13 @@ class ForgotPasswordController extends Controller
             $message->to($request->email);
             $message->subject('Reset Password');
         });
-        // DB::table('password_reset_tokens')->where('email', $request->input('email'))->delete();
-        // Trả về phản hồi thành công hoặc thông báo thành công
         return response()->json([
             'message' => 'A reset link has been sent to your email address.'
         ], 200);
     }
-    public function viewResetPassword()
+    public function get()
     {
-        return view('welcome');
+        return view('cars.index');
     }
-    
-    public function resetPassword( $token)
-    {
-//     $request->validate([
-//         'password' => 'required|confirmed',
-//     ]);
 
-        dd($token);
-//         // Đặt lại mật khẩu mới cho người dùng
-
-//         // Xóa token sau khi đã đặt lại mật khẩu
-//         DB::table('password_reset_tokens')->where('email', $request->input('email'))->delete();
-
-//         // Trả về phản hồi thành công
-//         return response()->json([
-//             'message' => 'Password has been reset successfully.'
-//         ], 200);
- }
 }

@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Facades\Validator;
 
-class UsersImport implements ToCollection, WithHeadingRow
+class DepartmentsImport implements ToCollection, WithHeadingRow
 {
     /**
      * @param Collection $collection
