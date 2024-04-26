@@ -27,7 +27,9 @@ class SchedulesImport implements ToCollection, WithHeadingRow
                 'participants' => 'required|string',
                 'program' => 'required|string',
             ]);
-
+            if ($validator->fails()) {
+                continue; // Bỏ qua dữ liệu không hợp lệ và tiếp tục với dữ liệu tiếp theo
+            }
             Schedule::create([
                 'department_id' => $row['department_id'],
                 'datetime' => $row['datetime'],

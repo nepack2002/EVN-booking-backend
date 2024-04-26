@@ -27,7 +27,7 @@ class AuthController extends Controller
         return response()->json([
             'messages' => 'Incorrect password',
         ], 404);
-    }    Auth::login($user);
+    }   
     // Tạo token
     $token = $user->createToken('auth_token')->plainTextToken;
     

@@ -14,56 +14,71 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::middleware('admin')->group(function () {
         //UsersController
-        Route::get('/users', [UsersController::class, 'getUser']);
-        Route::get('/users/{id}', [UsersController::class, 'get']);
-        Route::post('/users/{id}', [UsersController::class, 'update']);
-        Route::post('/users', [UsersController::class, 'create']);
-        Route::delete('/users/{id}', [UsersController::class, 'destroy']);
-        Route::post('/user/import', [UsersController::class, 'import']);
+        Route::controller(UsersController::class)->group(function () {
+            Route::get('/users','getUser');
+            Route::get('/users/{id}', 'get');
+            Route::post('/users/{id}', 'update');
+            Route::post('/users', 'create');
+            Route::delete('/users/{id}', 'destroy');
+            Route::post('/user/import', 'import');
+        });
 
         //CarsController
-        Route::get('/cars', [CarsController::class, 'getCar']);
-        Route::post('/cars', [CarsController::class, 'create']);
-        Route::get('/cars/{id}', [CarsController::class, 'get']);
-        Route::post('/cars/{id}', [CarsController::class, 'update']);
-        Route::delete('/cars/{id}', [CarsController::class, 'destroy']);
-        Route::post('car/import', [CarsController::class, 'import']);
+        Route::controller(CarsController::class)->group(function () {
+            Route::get('/cars', 'getCar');
+            Route::post('/cars', 'create');
+            Route::get('/cars/{id}', 'get');
+            Route::post('/cars/{id}', 'update');
+            Route::delete('/cars/{id}', 'destroy');
+            Route::post('car/import', 'import');
+        });
+       
 
         //DepartmentController
-        Route::get('/departments', [DepartmentController::class, 'index']);
-        Route::post('/departments', [DepartmentController::class, 'store']);
-        Route::post('/departments/{department}', [DepartmentController::class, 'update']);
-        Route::get('/departments/{department}', [DepartmentController::class, 'show']);
-        Route::post('/department/import', [DepartmentController::class, 'import']);
-        Route::delete('/departments/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
+        Route::controller(DepartmentController::class)->group(function () {
+            Route::get('/departments', 'index');
+            Route::post('/departments', 'store');
+            Route::post('/departments/{department}', 'update');
+            Route::get('/departments/{department}', 'show');
+            Route::post('/department/import', 'import');
+            Route::delete('/departments/{department}', 'destroy');
+        });
+
 
         //ScheduleController
-        Route::get('/schedules', [ScheduleController::class, 'index']);
-        Route::get('/schedules/{schedule}', [ScheduleController::class, 'show']);
-        Route::post('/schedules', [ScheduleController::class, 'add']);
-        Route::post('/schedules/{id}', [ScheduleController::class, 'update']);
-        Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy']);
-        Route::post('/schedule/import', [ScheduleController::class, 'import']);
+        Route::controller(ScheduleController::class)->group(function () {
+            Route::get('/schedules', 'index');
+            Route::get('/schedules/{schedule}', 'show');
+            Route::post('/schedules', 'add');
+            Route::post('/schedules/{id}', 'update');
+            Route::delete('/schedules/{id}', 'destroy');
+            Route::post('/schedule/import', 'import');
+        });
     });
     Route::middleware('qtvt')->group(function () {
         Route::get('/users', [UsersController::class, 'getUser']);
-        Route::get('/cars', [CarsController::class, 'getCar']);
-        Route::post('/cars', [CarsController::class, 'create']);
-        Route::get('/cars/{id}', [CarsController::class, 'get']);
-        Route::post('/cars/{id}', [CarsController::class, 'update']);
-        Route::delete('/cars/{id}', [CarsController::class, 'destroy']);
-        Route::post('car/import', [CarsController::class, 'import']);
+        //CarsController
+        Route::controller(CarsController::class)->group(function () {
+            Route::get('/cars', 'getCar');
+            Route::post('/cars', 'create');
+            Route::get('/cars/{id}', 'get');
+            Route::post('/cars/{id}', 'update');
+            Route::delete('/cars/{id}', 'destroy');
+            Route::post('car/import', 'import');
+        });
     });
     Route::middleware('qtct')->group(function () {
         //ScheduleController
         Route::get('/cars', [CarsController::class, 'getCar']);
-        Route::get('/departments', [DepartmentController::class, 'index']);
-        Route::get('/schedules', [ScheduleController::class, 'index']);
-        Route::get('/schedules/{schedule}', [ScheduleController::class, 'show']);
-        Route::post('/schedules', [ScheduleController::class, 'add']);
-        Route::post('/schedules/{id}', [ScheduleController::class, 'update']);
-        Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy']);
-        Route::post('/schedule/import', [ScheduleController::class, 'import']);
+        //ScheduleController
+        Route::controller(ScheduleController::class)->group(function () {
+            Route::get('/schedules', 'index');
+            Route::get('/schedules/{schedule}','show');
+            Route::post('/schedules', 'add');
+            Route::post('/schedules/{id}', 'update');
+            Route::delete('/schedules/{id}', 'destroy');
+            Route::post('/schedule/import', 'import');
+        });
     });
 });
 
