@@ -14,13 +14,17 @@ class Schedule extends Model
         'location',
         'lat_location',
         'long_location',
+        'location_2',
+        'lat_location_2',
+        'long_location_2',
         'car_id',
         'participants',
-        'program'
+        'program',
     ];
+
     public function department()
     {
-        return $this->belongsTo(Department::class,'dependent_id');
+        return $this->belongsTo(Department::class,'department_id');
     }
 
     public function car()

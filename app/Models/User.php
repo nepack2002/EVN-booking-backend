@@ -19,9 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
+        'username',
         'password',
         'role',
+        'phone',
         'department_id'
         
     ];
@@ -46,7 +47,7 @@ class User extends Authenticatable
     ];
     public function car()
     {
-        return $this->hasMany(Car::class, 'user_id');
+        return $this->hasOne(Car::class, 'user_id');
     }
     public function department(){
         return $this->belongsTo(Department::class, 'department_id');
@@ -63,6 +64,14 @@ class User extends Authenticatable
     public function isQTCT()
     {
         return $this->role === 'quản trị công tác';
+    }
+    public function isUser()
+    {
+        return $this->role === 'user';
+    }
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
     }
 
 }

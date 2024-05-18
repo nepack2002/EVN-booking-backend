@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('datetime');
             $table->string('location');
             $table->float('lat_location')->nullable();
-            $table->float('long_location')->nullable();
+            $table->float('long_location')->nullable();     
             $table->unsignedBigInteger('car_id');
             $table->string('participants');
             $table->string('program');

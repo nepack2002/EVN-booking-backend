@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b8a8aec8d357d0f2b7944a457807990b",
+    "content-hash": "65285c0f1671e4b3f6c1621a8c6fd521",
     "packages": [
         {
             "name": "brick/math",
@@ -776,6 +776,106 @@
                 }
             ],
             "time": "2023-10-12T05:21:21+00:00"
+        },
+        {
+            "name": "geocoder-php/geocoder-extra",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/geocoder-php/geocoder-extra.git",
+                "reference": "9e81d42c6048f0743821758a41b07ede160ed3d9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/geocoder-php/geocoder-extra/zipball/9e81d42c6048f0743821758a41b07ede160ed3d9",
+                "reference": "9e81d42c6048f0743821758a41b07ede160ed3d9",
+                "shasum": ""
+            },
+            "require": {
+                "willdurand/geocoder": "~2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Geocoder": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William DURAND",
+                    "email": "william.durand1@gmail.com"
+                }
+            ],
+            "description": "Geocoder extra features.",
+            "support": {
+                "issues": "https://github.com/geocoder-php/geocoder-extra/issues",
+                "source": "https://github.com/geocoder-php/geocoder-extra/tree/v1.4.0"
+            },
+            "time": "2014-11-20T08:24:31+00:00"
+        },
+        {
+            "name": "geocoder-php/geocoder-service-provider",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/geocoder-php/GeocoderServiceProvider.git",
+                "reference": "8a5c3e8d23b74b27cc0e2c7a7e508abc669b5629"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/geocoder-php/GeocoderServiceProvider/zipball/8a5c3e8d23b74b27cc0e2c7a7e508abc669b5629",
+                "reference": "8a5c3e8d23b74b27cc0e2c7a7e508abc669b5629",
+                "shasum": ""
+            },
+            "require": {
+                "willdurand/geocoder": "^2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.0",
+                "silex/silex": "^1.0",
+                "symfony/twig-bridge": "^2.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Geocoder": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kévin Gomez",
+                    "email": "contact@kevingomez.fr",
+                    "homepage": "http://www.kevingomez.fr/"
+                }
+            ],
+            "description": "Geocoder service provider for Silex",
+            "keywords": [
+                "geocoder",
+                "provider",
+                "service",
+                "silex"
+            ],
+            "support": {
+                "issues": "https://github.com/geocoder-php/GeocoderServiceProvider/issues",
+                "source": "https://github.com/geocoder-php/GeocoderServiceProvider/tree/master"
+            },
+            "time": "2016-10-22T14:29:38+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -6262,6 +6362,73 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "willdurand/geocoder",
+            "version": "2.8.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/geocoder-php/php-common.git",
+                "reference": "8a66b8a227328f28ba12f98937a33c6fa0bb90f8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/geocoder-php/php-common/zipball/8a66b8a227328f28ba12f98937a33c6fa0bb90f8",
+                "reference": "8a66b8a227328f28ba12f98937a33c6fa0bb90f8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "geoip/geoip": "~1.13",
+                "geoip2/geoip2": "~0.6",
+                "guzzle/guzzle": "@stable",
+                "kriswallsmith/buzz": "@stable",
+                "zendframework/zend-http": "~2.1"
+            },
+            "suggest": {
+                "ext-curl": "Enabling the curl extension allows you to use the CurlHttpAdapter.",
+                "ext-geoip": "Enabling the geoip extension allows you to use the MaxMindProvider.",
+                "geoip/geoip": "If you are going to use the MaxMindBinaryProvider (conflict with geoip extension).",
+                "geoip2/geoip2": "If you are going to use the GeoIP2DatabaseProvider.",
+                "guzzle/guzzle": "Enabling Guzzle allows you to use the GuzzleHttpAdapter.",
+                "kriswallsmith/buzz": "Enabling Buzz allows you to use the BuzzHttpAdapter.",
+                "zendframework/zend-http": "Enabling Zend Http allows you to use the ZendHttpAdapter."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Geocoder": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William DURAND",
+                    "email": "william.durand1@gmail.com"
+                }
+            ],
+            "description": "The almost missing Geocoder PHP 5.3 library.",
+            "homepage": "http://geocoder-php.org",
+            "keywords": [
+                "abstraction",
+                "geocoder",
+                "geocoding",
+                "geoip"
+            ],
+            "support": {
+                "source": "https://github.com/geocoder-php/php-common/tree/2.8.2"
+            },
+            "time": "2015-01-07T13:23:35+00:00"
         }
     ],
     "packages-dev": [

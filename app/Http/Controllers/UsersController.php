@@ -19,9 +19,9 @@ class UsersController extends Controller
         if (!empty($query)) {
             $users = User::with(['car', 'department'])
                 ->where('name', 'like', '%' . $query . '%')
-                ->paginate(10);
+                ->paginate(5);
         } else {
-            $users = User::with(['car', 'department'])->paginate(10);
+            $users = User::with(['car', 'department'])->paginate(5);
         }
 
         return response()->json($users);
@@ -29,17 +29,25 @@ class UsersController extends Controller
 
     public function create(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'role' => 'required',
-            'password' => 'required',
-            'department_id' => 'required'
-        ]);
+        $rules = [
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|unique:users,username',
+            'role' => 'required|string',
+            'password' => 'required|string|min:3',
+            'department_id' => 'required|integer',
+        ];
+
+        // Nếu role là user, thêm quy tắc bắt buộc cho trường phone
+        if ($request->role === 'user') {
+            $rules['phone'] = 'required|string|max:10';
+        }
+
+        // Thực hiện validation
+        $request->validate($rules);
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'username' => $request->username,
             'role' => $request->role,
             'password' => Hash::make($request->password),
             'department_id' => $request->department_id,
@@ -61,17 +69,27 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'role' => 'required|string',
             'password' => 'sometimes|required',
             'department_id' => 'required'
-        ]);
+        ];
+
+        // Nếu role là user, thêm quy tắc bắt buộc cho trường phone
+        if ($request->role === 'user') {
+            $rules['phone'] = 'required|string|max:10';
+        }
+
+        // Thực hiện validation
+        $request->validate($rules);
+        
 
         $user->name = $request->name;
-        $user->email = $request->email;
+        $user->username = $request->username;
         $user->role = $request->role;
+        $user->phone = $request->phone ?? null;
         $user->department_id = $request->department_id;
         $user->save();
 

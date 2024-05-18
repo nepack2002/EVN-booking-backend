@@ -7,6 +7,7 @@ use App\Http\Controllers\CarsController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\UserPageController;
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
@@ -15,7 +16,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::middleware('admin')->group(function () {
         //UsersController
         Route::controller(UsersController::class)->group(function () {
-            Route::get('/users','getUser');
+            Route::get('/users', 'getUser');
             Route::get('/users/{id}', 'get');
             Route::post('/users/{id}', 'update');
             Route::post('/users', 'create');
@@ -32,7 +33,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::delete('/cars/{id}', 'destroy');
             Route::post('car/import', 'import');
         });
-       
+
 
         //DepartmentController
         Route::controller(DepartmentController::class)->group(function () {
@@ -53,6 +54,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('/schedules/{id}', 'update');
             Route::delete('/schedules/{id}', 'destroy');
             Route::post('/schedule/import', 'import');
+            Route::post('/coordinates', [ScheduleController::class, 'storeCoordinates']);
         });
     });
     Route::middleware('qtvt')->group(function () {
@@ -69,15 +71,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::middleware('qtct')->group(function () {
         //ScheduleController
-        Route::get('/cars', [CarsController::class, 'getCar']);
-        //ScheduleController
         Route::controller(ScheduleController::class)->group(function () {
             Route::get('/schedules', 'index');
-            Route::get('/schedules/{schedule}','show');
+            Route::get('/schedules/{schedule}', 'show');
             Route::post('/schedules', 'add');
             Route::post('/schedules/{id}', 'update');
             Route::delete('/schedules/{id}', 'destroy');
             Route::post('/schedule/import', 'import');
+            Route::post('/coordinates', [ScheduleController::class, 'storeCoordinates']);
         });
     });
 });
@@ -85,3 +86,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forgotPassword', [ForgotPasswordController::class, 'forgotPassword']);
+
+Route::get('users/{userId}/schedules', [UserPageController::class, 'getUserSchedules']);
+Route::get('users/{userId}/schedulesDate', [UserPageController::class, 'getSchedulesGroupedByDate']);
+Route::get('users/ScheduleLocation/{id}',[UserPageController::class, 'getLocation']);
+Route::get('users/schedule/{schedule}', [UserPageController::class, 'getDetail']);
+Route::get('users/notification/{id}', [UserPageController::class, 'getNotification']);
+Route::get('users/notificationUnRead/{id}', [UserPageController::class, 'getNotificationUnRead']);
+Route::put('/notifications/{notification}/mark-as-read', [UserPageController::class, 'markAsRead']);
+Route::post('/cars/update/{id}', [UserPageController::class, 'updateRun']);
+Route::post('/schedule/location/{id}', [UserPageController::class, 'sendLocation']);
+Route::get('/schedule/car/{id}', [UserPageController::class, 'getCarOfUser']);

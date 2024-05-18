@@ -12,10 +12,10 @@ class AuthController extends Controller
     public function login(Request $request){
     // Xác thực yêu cầu
     $request->validate([
-        'email' => 'required|email',
+        'username' => 'required',
         'password' => 'required',
     ]);
-    $user = User::where('email', $request->email)->first();
+    $user = User::where('username', $request->username)->first();
 
     if (!$user) {
         return response()->json([
@@ -38,13 +38,11 @@ class AuthController extends Controller
 }
 
     public function register(Request $request){
-        $message = [
-            'email.email' => "Error Email", 
-        ];
+        
         $validator = Validator::make($request->all(), [
-            'email' =>'required|email',
+            'username' =>'required',
             'password' =>'required|min:5',
-        ], $message);
+        ]);
         if ($validator->fails()) {
             return response()->json(
                 [
@@ -54,8 +52,9 @@ class AuthController extends Controller
         }
         User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'username' => $request->username,
             'password' => Hash::make($request->password),
+            'phone' => $request->phone ?? null,
         ]);
         return response()->json(
             [

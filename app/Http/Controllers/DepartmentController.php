@@ -7,20 +7,22 @@ use Illuminate\Http\Request;
 use App\Imports\DepartmentsImport;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+
 class DepartmentController extends Controller
 {
     //lấy full
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $query = $request->query('query');
         if (!empty($query)) {
             $departments = Department::with('children')->where('name', 'like', '%' . $query . '%')->paginate(5);
-        }else{
+        } else {
             $departments = Department::with('children')->paginate(5);
         }
-            return response()->json($departments);
+        return response()->json($departments);
     }
     //thêm
-     public function store(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
@@ -32,23 +34,25 @@ class DepartmentController extends Controller
         return response()->json("Thành công");
     }
     //hiện chi tiết
-    public function show(Department $department){
+    public function show(Department $department)
+    {
         return response()->json($department);
-    } 
+    }
     //cập nhật
     public function update(Request $request, Department $department)
     {
         $request->validate([
             'name' => 'required',
-            'parent_id' => 'nullable|exists:departments,id'
+            'parent_id' => 'sometimes|nullable|exists:departments,id'
         ]);
 
-                $department->update($request->all());
-        
+
+        $department->update($request->all());
+
         return response()->json("Thành công");
     }
     //xóa
-     public function destroy(Department $department)
+    public function destroy(Department $department)
     {
         $department->delete();
 
@@ -68,5 +72,4 @@ class DepartmentController extends Controller
 
         return response()->json(['success' => true]);
     }
-    
 }
