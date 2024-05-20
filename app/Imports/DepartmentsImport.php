@@ -16,14 +16,13 @@ class DepartmentsImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            // Kiểm tra tính hợp lệ của dữ liệu
             $validator = Validator::make($row->toArray(), [
                 'name' => 'required|string|max:255',
                 'parent_id' => 'nullable|exists:departments,id',
             ]);
 
             if ($validator->fails()) {
-                continue; // Bỏ qua dữ liệu không hợp lệ và tiếp tục với dữ liệu tiếp theo
+                continue;
             }
             Department::create([
                 'name' => $row['name'],

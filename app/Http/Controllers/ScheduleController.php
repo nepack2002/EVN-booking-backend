@@ -8,13 +8,18 @@ use App\Models\Schedule;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\SchedulesImport;
-use Illuminate\Support\Facades\DB;
 
 class ScheduleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $schedules = Schedule::paginate(5);
+        $query = $request->query('query');
+        if (!empty($query)) {
+            $schedules = Schedule::where('program', 'like', '%' . $query . '%')
+                ->paginate(5);
+        } else {
+            $schedules = Schedule::paginate(5);
+        }
         return response()->json($schedules);
     }
     public function show(Schedule $schedule)

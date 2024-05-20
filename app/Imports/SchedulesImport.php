@@ -16,13 +16,15 @@ class SchedulesImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            // Validate dữ liệu từ các hàng
             $validator = Validator::make($row->toArray(), [
                 'department_id' => 'required|exists:departments,id',
                 'datetime' => 'required|date',
                 'location' => 'required|string',
                 'lat_location' => 'nullable|numeric',
                 'long_location' => 'nullable|numeric',
+                'location_2' => 'required|string',
+                'lat_location_2' => 'nullable|numeric',
+                'long_location_2' => 'nullable|numeric',
                 'car_id' => 'required|exists:cars,id',
                 'participants' => 'required|string',
                 'program' => 'required|string',

@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Car;
 use App\Imports\CarsImport;
-use App\Models\Schedule;
 use App\Models\User;
 use Maatwebsite\Excel\Facades\Excel;
-use Carbon\Carbon;
 
 class CarsController extends Controller
 {
@@ -110,13 +108,12 @@ class CarsController extends Controller
     {
         $existingCar = Car::where('user_id', $request->user_id)->where('id', '!=', $id)->first();
         if ($existingCar) {
-            // User already has another car linked
             return response()->json(['messages' => 'Người dùng này đã sở hữu một xe khác. Không thể cập nhật xe mới với user_id này.'], 409);
         }
         $request->validate([
             'ten_xe' => 'required|min:2',
             'mau_xe' => 'required',
-            // 'user_id' => 'required',
+            'user_id' => 'required',
             'bien_so_xe' => 'required|unique:cars,bien_so_xe,' . $id . ',id',
             'so_khung' => 'required|unique:cars,so_khung,' . $id . ',id',
             'so_cho' => 'required',
@@ -168,25 +165,5 @@ class CarsController extends Controller
         $data = Excel::import(new CarsImport, $path);
 
         return response()->json($data);
-    }
-    public function getUserCars($userId)
-    {
-        $user = User::findOrFail($userId);
-        if ($user->isUser()) {
-            $cars = Car::where('user_id', $userId)->get();
-            $carsInSchedule = [];
-
-            foreach ($cars as $car) {
-                // Kiểm tra xem xe có trong lịch trình không
-                if ($this->isCarInSchedule($car)) {
-                    // Nếu xe có trong lịch trình, thêm vào mảng $carsInSchedule
-                    $carsInSchedule[] = $car;
-                }
-            }
-        } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-        // Trả về danh sách các xe của người dùng có trong lịch trình
-        return response()->json($carsInSchedule);
     }
 }

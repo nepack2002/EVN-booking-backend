@@ -18,6 +18,13 @@ class CarsImport implements ToCollection, WithHeadingRow
             $car = Car::where('bien_so_xe', $row['bien_so_xe'])
                 ->where('so_khung', $row['so_khung'])
                 ->first();
+
+            // Check if user already has a different car
+            $existingCar = Car::where('user_id', $row['user_id'])->where('id', '!=', $car ? $car->id : null)->first();
+            if ($existingCar) {
+                continue;
+            }
+
             if ($car) {
                 $car->update([
                     'ten_xe' => $row['ten_xe'],

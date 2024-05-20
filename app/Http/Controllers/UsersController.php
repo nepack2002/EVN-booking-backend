@@ -37,7 +37,6 @@ class UsersController extends Controller
             'department_id' => 'required|integer',
         ];
 
-        // Nếu role là user, thêm quy tắc bắt buộc cho trường phone
         if ($request->role === 'user') {
             $rules['phone'] = 'required|string|max:10';
         }

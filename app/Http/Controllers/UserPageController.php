@@ -14,10 +14,7 @@ class UserPageController extends Controller
 {
     public function getDetail(Schedule $schedule)
     {
-        // Load các quan hệ 'department' và 'car'
         $schedule->load('department', 'car');
-
-        // Trả về JSON với dữ liệu đã được load
         return response()->json($schedule);
     }
     public function getCarOfUser(String $id)
