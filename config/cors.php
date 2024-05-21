@@ -1,9 +1,14 @@
 <?php
 
 return [
-    'paths' => ['*', 'sanctum/csrf-cookie'],
+    'paths' => [
+        'api/*',
+        'sanctum/csrf-cookie'
+    ],
+
     'allowed_methods' => ['*'],
-    'allowed_origins' => ['*'],
+
+    'allowed_origins' => [env('APP_FRONT')],
 
     'allowed_origins_patterns' => [],
 
