@@ -38,7 +38,7 @@ class UsersController extends Controller
         ];
 
         if ($request->role === 'user') {
-            $rules['phone'] = 'required|string|max:10';
+            $rules['phone'] = 'required|string|max:10|unique:users,phone';
         }
 
         // Thực hiện validation
@@ -48,6 +48,7 @@ class UsersController extends Controller
             'name' => $request->name,
             'username' => $request->username,
             'role' => $request->role,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'department_id' => $request->department_id,
         ]);

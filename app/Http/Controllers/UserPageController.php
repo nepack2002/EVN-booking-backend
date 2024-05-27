@@ -52,7 +52,6 @@ class UserPageController extends Controller
             // Lấy danh sách các lịch trình mà các xe của người dùng tham gia
             $schedules = Schedule::with('car')->whereIn('car_id', $cars)->get();
 
-            // Trả về danh sách các lịch trình mà các xe của người dùng tham gia
             return response()->json($schedules);
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -60,10 +59,7 @@ class UserPageController extends Controller
     }
     public function updateRun(Request $request, $id)
     {
-        // Lấy thông tin của lịch trình cần cập nhật
         $schedule = Schedule::findOrFail($id);
-
-       
         $schedule->status = $request->input('status');
         $schedule->save();
 
@@ -85,6 +81,13 @@ class UserPageController extends Controller
         $car->save();
         $scheduleLocation->save();
     }
+    public function updateLastLocation(Request $request, $id){
+        $schedule = Schedule::findOrFail($id);
+        $schedule->location_2 = $request->input('location_2');
+        $schedule->lat_location_2 = $request->input('lat_location_2');
+        $schedule->long_location_2 = $request->input('long_location_2');
+        $schedule->save();
+    }
     public function getSchedulesGroupedByDate()
     {
         $now = Carbon::now();
@@ -93,7 +96,6 @@ class UserPageController extends Controller
             ->orderBy('datetime')
             ->get()
             ->groupBy(function ($date) {
-                // Ở đây ta sử dụng Carbon để định dạng datetime
                 return Carbon::parse($date->datetime)->format('Y-m-d');
             });
 
