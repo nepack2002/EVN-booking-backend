@@ -81,7 +81,7 @@ class UserPageController extends Controller
         $car->save();
         $scheduleLocation->save();
     }
-    public function updateLastLocation(Request $request, $id){
+    public function x(Request $request, $id){
         $schedule = Schedule::findOrFail($id);
         $schedule->location_2 = $request->input('location_2');
         $schedule->lat_location_2 = $request->input('lat_location_2');

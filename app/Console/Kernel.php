@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('nofication:cron')->hourly();
         $schedule->command('location:cron')->hourly();
+        $schedule->command('date:cron')->everyMinute();
     }
 
     /**
