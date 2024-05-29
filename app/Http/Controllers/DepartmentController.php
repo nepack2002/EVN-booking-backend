@@ -21,6 +21,28 @@ class DepartmentController extends Controller
         }
         return response()->json($departments);
     }
+    public function index2()
+    {
+        $departments = Department::all()->toArray();
+
+        $hierarchy = $this->buildHierarchy($departments);
+
+        return response()->json($hierarchy);
+    }
+    private function buildHierarchy(array $departments, $parentId = null, $level = 0)
+    {
+        $result = [];
+        foreach ($departments as $department) {
+            if ($department['parent_id'] == $parentId) {
+                $department['level'] = $level;
+                $department['full_name'] = str_repeat('-', $level) . ' ' . $department['name'];
+                $result[] = $department;
+                $children = $this->buildHierarchy($departments, $department['id'], $level + 1);
+                $result = array_merge($result, $children);
+            }
+        }
+        return $result;
+    }
     //thêm
     public function store(Request $request)
     {
@@ -52,11 +74,19 @@ class DepartmentController extends Controller
         return response()->json("Thành công");
     }
     //xóa
-    public function destroy(Department $department)
+    public function destroy($id)
     {
-        $department->delete();
+        try {
+            // Đặt giá trị department_id trong bảng schedules thành NULL
+            Department::where('id', $id)->update(['parent_id' => null]);
 
-        return response()->json("Thành công");
+            // Xóa phòng ban
+            Department::destroy($id);
+
+            return response()->json(['message' => 'Department deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
     public function import(Request $request)
     {

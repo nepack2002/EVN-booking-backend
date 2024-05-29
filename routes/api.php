@@ -38,11 +38,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         //DepartmentController
         Route::controller(DepartmentController::class)->group(function () {
             Route::get('/departments', 'index');
+            Route::get('/departments2', 'index2');
             Route::post('/departments', 'store');
             Route::post('/departments/{department}', 'update');
             Route::get('/departments/{department}', 'show');
             Route::post('/department/import', 'import');
-            Route::delete('/departments/{department}', 'destroy');
+            Route::delete('/departments/{id}', 'destroy');
         });
 
 
