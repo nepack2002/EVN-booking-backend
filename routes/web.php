@@ -18,6 +18,6 @@ use App\Http\Controllers\ForgotPasswordController;
 |
 */
 
-Route::get('/forgot', function () {
-    return view('forgot');
+Route::get('/', function () {
+    return view('welcome');
 });

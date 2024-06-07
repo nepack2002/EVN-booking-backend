@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Imports\DepartmentsImport;
+use App\Models\Schedule;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
-
 class DepartmentController extends Controller
 {
     //lấy full
@@ -78,7 +78,7 @@ class DepartmentController extends Controller
     {
         try {
             // Đặt giá trị department_id trong bảng schedules thành NULL
-            Department::where('id', $id)->update(['parent_id' => null]);
+            Schedule::where('department_id', $id)->delete();
 
             // Xóa phòng ban
             Department::destroy($id);

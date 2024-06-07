@@ -29,7 +29,7 @@ class CarsController extends Controller
             'so_dau_xang_tieu_thu' => 'required',
             'ngay_bao_duong_gan_nhat' => 'required',
             'han_dang_kiem_tiep_theo' => 'required',
-            'anh_xe' => 'required',
+            'anh_xe' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 
         if ($request->hasFile('anh_xe') && $request->file('anh_xe')->isValid()) {
@@ -120,10 +120,10 @@ class CarsController extends Controller
             'dac_diem_mac_dinh' => 'required',
             'so_dau_xang_tieu_thu' => 'required',
             'ngay_bao_duong_gan_nhat' => 'required',
-            'han_dang_kiem_tiep_theo' => 'required',
-            'anh_xe' => 'required',
+            'han_dang_kiem_tiep_theo' => 'required', 
+            'anh_xe' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
-        
+
         $car = Car::find($id);
         $car->ten_xe = $request->ten_xe;
         $car->mau_xe = $request->mau_xe;

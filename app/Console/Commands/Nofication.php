@@ -36,24 +36,41 @@ class Nofication extends Command
         $cars = Car::all();
         $user_ids = [];
         $currentTime = now();
-        // Định dạng thời gian theo định dạng cụ thể
         $formattedTime = date('Y-m-d H:i:s', $currentTime->timestamp);
 
-        foreach ($cars as $car){
+        foreach ($cars as $car) {
             $user_ids[$car->id] = $car->user_id; // Mảng user_id theo thứ tự xe
+
+            // Kiểm tra hạn đăng kiểm
             $carTime = Carbon::parse($car->han_dang_kiem_tiep_theo);
             if ($carTime->isPast()) {
-                
-            }else{
+                // Hạn đăng kiểm đã qua
+            } else {
                 $diffInHours = $carTime->diffInHours($formattedTime);
-                if ($diffInHours == 24){
+                if ($diffInHours == 24) {
                     $notification = new Notification();
                     $notification->user_id = $user_ids[$car->id];
                     $notification->message = "Bạn còn 1 ngày cho hạn đăng kiểm sắp tới";
                     $notification->save();
-                }else{
-                    $this->info("Thời gian lịch hẹn: " . $carTime);
-                    $this->info("Thời gian còn lại: " . $diffInHours);
+                } else {
+                    $this->info("Thời gian hạn đăng kiểm: " . $carTime);
+                    $this->info("Thời gian còn lại: " . $diffInHours . " giờ");
+                }
+            }
+
+            // Kiểm tra hạn bảo dưỡng gần nhất
+            $maintenanceTime = Carbon::parse($car->ngay_bao_duong_gan_nhat);
+            $diffInDays = $maintenanceTime->diffInDays($currentTime);
+            if ($diffInDays >= 1 && $diffInDays <= 170) {
+                $existingNotification = Notification::where('user_id', $user_ids[$car->id])
+                    ->where('message', 'Bạn còn ' . $diffInDays . ' ngày cho hạn bảo dưỡng gần nhất')
+                    ->whereDate('created_at', Carbon::today())
+                    ->first();
+                if (!$existingNotification) {
+                    $notification = new Notification();
+                    $notification->user_id = $user_ids[$car->id];
+                    $notification->message = "Bạn còn $diffInDays ngày cho hạn bảo dưỡng gần nhất";
+                    $notification->save();
                 }
             }
         }
@@ -66,8 +83,6 @@ class Nofication extends Command
             if ($scheduleTime->isPast()) {
                 // Sự kiện đã quá hạn
             } else {
-                
-                // $this->info('Thời gian hiện tại: ' . $now);
                 $diffInHours = $scheduleTime->diffInHours($formattedTime);
 
                 // Kiểm tra nếu còn 1 ngày hoặc 1 tiếng, thêm thông báo tương ứng
@@ -83,7 +98,7 @@ class Nofication extends Command
                     $notification->save();
                 } else {
                     $this->info("Thời gian lịch hẹn: " . $scheduleTime);
-                    $this->info("Thời gian còn lại: " . $diffInHours);
+                    $this->info("Thời gian còn lại: " . $diffInHours . " giờ");
                 }
             }
         }

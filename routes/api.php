@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarsController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\OneSignalController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserPageController;
-
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::get('/logout', [AuthController::class, 'logout']);
@@ -99,3 +99,5 @@ Route::post('/cars/update/{id}', [UserPageController::class, 'updateRun']);
 Route::post('/schedule/location/{id}', [UserPageController::class, 'sendLocation']);
 Route::post('/schedule/sendLastLocation/{id}', [UserPageController::class, 'updateLastLocation']);
 Route::get('/schedule/car/{id}', [UserPageController::class, 'getCarOfUser']);
+// Route::post('/send-notification', 'NotificationController@sendNotification');
+Route::post('send-oneSignal', [OneSignalController::class,'sendOneSignal']);

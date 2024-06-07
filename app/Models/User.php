@@ -24,7 +24,7 @@ class User extends Authenticatable
         'role',
         'phone',
         'department_id'
-        
+
     ];
 
     /**
@@ -49,7 +49,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(Car::class, 'user_id');
     }
-    public function department(){
+    public function department()
+    {
         return $this->belongsTo(Department::class, 'department_id');
     }
     public function isAdmin()
@@ -73,5 +74,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class);
     }
-
+    public function deviceIds()
+    {
+        return $this->hasMany(DeviceId::class);
+    }
 }
