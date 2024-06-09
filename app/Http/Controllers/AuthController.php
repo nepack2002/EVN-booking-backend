@@ -10,34 +10,34 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function login(Request $request){
-    // Xác thực yêu cầu
-    $request->validate([
-        'username' => 'required',
-        'password' => 'required',
-    ]);
-    $user = User::where('username', $request->username)->first();
+        // Xác thực yêu cầu
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+        $user = User::where('username', $request->username)->first();
 
-    if (!$user) {
+        if (!$user) {
+            return response()->json([
+                'messages' => 'User not found',
+            ], 404);
+        }
+
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'messages' => 'Incorrect password',
+            ], 404);
+        }
+        // Tạo token
+        $token = $user->createToken('auth_token')->plainTextToken;
+        $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value], config('sanctum.rt_expiration'));
+
         return response()->json([
-            'messages' => 'User not found',
-        ], 404);
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'refresh_token' => $refreshToken->plainTextToken,
+        ]);
     }
-
-    if (!Hash::check($request->password, $user->password)) {
-        return response()->json([
-            'messages' => 'Incorrect password',
-        ], 404);
-    }
-    // Tạo token
-    $token = $user->createToken('auth_token')->plainTextToken;
-    $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value], config('sanctum.rt_expiration'));
-
-    return response()->json([
-        'access_token' => $token,
-        'token_type' => 'Bearer',
-        'refresh_token' => $refreshToken->plainTextToken,
-    ]);
-}
 
     public function register(Request $request){
 
@@ -60,7 +60,7 @@ class AuthController extends Controller
         ]);
         return response()->json(
             [
-               'message' => "Register Success",
+                'message' => "Register Success",
             ]
         );
     }
