@@ -20,7 +20,7 @@ class Date extends Command
      *
      * @var string
      */
-    protected $description = 'Checks for expired dates and updates their status.';
+    protected $description = 'Kiem tra các lịch di chuyển quên chưa đóng';
 
     /**
      * Execute the console command.

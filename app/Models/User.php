@@ -60,11 +60,11 @@ class User extends Authenticatable
 
     public function isQTVT()
     {
-        return $this->role === 'quản trị vật tư';
+        return $this->role === 'qtvt';
     }
     public function isQTCT()
     {
-        return $this->role === 'quản trị công tác';
+        return $this->role === 'qtct';
     }
     public function isUser()
     {

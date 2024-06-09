@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TokenAbility;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -85,6 +86,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/refresh-token', [AuthController::class, 'refresh'])->middleware([
+    'auth:sanctum',
+    'ability:'.TokenAbility::ISSUE_ACCESS_TOKEN->value,
+]);
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forgotPassword', [ForgotPasswordController::class, 'forgotPassword']);
 
