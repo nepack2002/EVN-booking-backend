@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\TokenAbility;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -29,11 +30,11 @@ class AuthController extends Controller
             ], 404);
         }
         // Tạo token
-        $token = $user->createToken('auth_token')->plainTextToken;
-        $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value], config('sanctum.rt_expiration'));
+        $accessToken = $user->createToken('access_token', [TokenAbility::ACCESS_API->value], Carbon::now()->addMinutes(config('sanctum.ac_expiration')));
+        $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value], Carbon::now()->addMinutes(config('sanctum.rt_expiration')));
 
         return response()->json([
-            'access_token' => $token,
+            'access_token' => $accessToken->plainTextToken,
             'token_type' => 'Bearer',
             'refresh_token' => $refreshToken->plainTextToken,
         ]);
@@ -75,7 +76,7 @@ class AuthController extends Controller
     }
 
     public function refresh(Request $request) {
-        $accessToken = $request->user()->createToken('access_token', [TokenAbility::ACCESS_API->value], config('sanctum.expiration'));
+        $accessToken = $request->user()->createToken('access_token', [TokenAbility::ACCESS_API->value], Carbon::now()->addMinutes(config('sanctum.ac_expiration')));
 
         return ['access_token' => $accessToken->plainTextToken];
     }
