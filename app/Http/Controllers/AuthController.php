@@ -77,7 +77,8 @@ class AuthController extends Controller
 
     public function refresh(Request $request) {
         $accessToken = $request->user()->createToken('access_token', [TokenAbility::ACCESS_API->value], Carbon::now()->addMinutes(config('sanctum.ac_expiration')));
+        $refreshToken = $request->user()->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value], Carbon::now()->addMinutes(config('sanctum.rt_expiration')));
 
-        return ['access_token' => $accessToken->plainTextToken];
+        return ['access_token' => $accessToken->plainTextToken, 'refresh_token' => $refreshToken->plainTextToken];
     }
 }
