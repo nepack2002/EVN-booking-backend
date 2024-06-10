@@ -45,7 +45,7 @@ class Handler extends ExceptionHandler
     {
         $this->renderable(function (AuthenticationException $e, $request) {
             if($request->is('api/*')){
-                return response()->json(['error' => 'looxi dawng nhap'], 401);
+                return response()->json(['error' => 'Lỗi đăng nhập'], 401);
             }
         });
     }
