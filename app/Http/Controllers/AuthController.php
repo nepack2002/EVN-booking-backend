@@ -29,11 +29,11 @@ class AuthController extends Controller
             ], 404);
         }
         // Tạo token
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $accessToken = $user->createToken('access_token', [TokenAbility::ACCESS_API->value], config('sanctum.expiration'));
         $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value], config('sanctum.rt_expiration'));
 
         return response()->json([
-            'access_token' => $token,
+            'access_token' => $accessToken->plainTextToken,
             'token_type' => 'Bearer',
             'refresh_token' => $refreshToken->plainTextToken,
         ]);
