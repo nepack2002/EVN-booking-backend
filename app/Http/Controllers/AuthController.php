@@ -75,6 +75,8 @@ class AuthController extends Controller
     }
 
     public function refresh(Request $request) {
+        $request->user()->currentAccessToken()->delete();
+
         $accessToken = $request->user()->createToken('access_token', [TokenAbility::ACCESS_API->value], config('sanctum.expiration'));
 
         return ['access_token' => $accessToken->plainTextToken];
