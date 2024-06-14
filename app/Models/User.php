@@ -45,14 +45,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
     public function car()
     {
         return $this->hasOne(Car::class, 'user_id');
     }
+
     public function department()
     {
         return $this->belongsTo(Department::class, 'department_id');
     }
+
     public function isAdmin()
     {
         return $this->role === 'admin';
@@ -62,18 +65,22 @@ class User extends Authenticatable
     {
         return $this->role === 'qtvt';
     }
+
     public function isQTCT()
     {
         return $this->role === 'qtct';
     }
+
     public function isUser()
     {
         return $this->role === 'user';
     }
+
     public function notifications()
     {
         return $this->hasMany(Notification::class);
     }
+
     public function deviceIds()
     {
         return $this->hasMany(DeviceId::class);

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Notification;
-use App\Models\User;
 use App\Models\Car;
-use App\Models\ScheduleLocation;
+use App\Models\Notification;
 use App\Models\Schedule;
+use App\Models\ScheduleLocation;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -17,7 +17,8 @@ class UserPageController extends Controller
         $schedule->load('department', 'car');
         return response()->json($schedule);
     }
-    public function getCarOfUser(String $id)
+
+    public function getCarOfUser(string $id)
     {
         $car = Car::where('user_id', $id)->first();
         if ($car) {
@@ -26,22 +27,26 @@ class UserPageController extends Controller
             return response()->json(['message' => 'Không tìm thấy xe cho người dùng này'], 404);
         }
     }
-    public function getNotification(String $id)
+
+    public function getNotification(string $id)
     {
         $notification = Notification::where('user_id', $id)->get();
         return response()->json($notification);
     }
+
     public function getNotificationUnRead(int $id)
     {
         $notificationCount = Notification::where('user_id', $id)->where('read', 0)->count();
         return response()->json($notificationCount);
     }
+
     public function markAsRead(Notification $notification)
     {
         $notification->update(['read' => 1]);
 
         return response()->json(['message' => 'Notification marked as read']);
     }
+
     public function getUserSchedules($userId)
     {
         $user = User::findOrFail($userId);
@@ -57,6 +62,7 @@ class UserPageController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
+
     public function updateRun(Request $request, $id)
     {
         $schedule = Schedule::findOrFail($id);
@@ -81,13 +87,16 @@ class UserPageController extends Controller
         $car->save();
         $scheduleLocation->save();
     }
-    public function x(Request $request, $id){
+
+    public function x(Request $request, $id)
+    {
         $schedule = Schedule::findOrFail($id);
         $schedule->location_2 = $request->input('location_2');
         $schedule->lat_location_2 = $request->input('lat_location_2');
         $schedule->long_location_2 = $request->input('long_location_2');
         $schedule->save();
     }
+
     public function getSchedulesGroupedByDate()
     {
         $now = Carbon::now();
@@ -101,8 +110,10 @@ class UserPageController extends Controller
 
         return response()->json($schedules);
     }
-    public function getLocation(String $id){
-        $locations = ScheduleLocation::where('schedule_id',$id)->get();
+
+    public function getLocation(string $id)
+    {
+        $locations = ScheduleLocation::where('schedule_id', $id)->get();
         return response()->json($locations);
     }
 }

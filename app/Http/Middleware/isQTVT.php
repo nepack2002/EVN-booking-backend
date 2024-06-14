@@ -11,12 +11,12 @@ class isQTVT
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-         if ($request->user() && ($request->user()->isQTVT() || $request->user()->isAdmin())) {
-             return $next($request);
+        if ($request->user() && ($request->user()->isQTVT() || $request->user()->isAdmin())) {
+            return $next($request);
         }
         return response()->json(['error' => 'Unauthorized'], 403);
     }

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'department_id',
         'datetime',
@@ -24,11 +25,11 @@ class Schedule extends Model
 
     public function department()
     {
-        return $this->belongsTo(Department::class,'department_id');
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
     public function car()
     {
-        return $this->belongsTo(Car::class,'car_id');
+        return $this->belongsTo(Car::class, 'car_id');
     }
 }

@@ -4,9 +4,9 @@ namespace App\Imports;
 
 use App\Models\Schedule;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Illuminate\Support\Facades\Validator;
 
 class SchedulesImport implements ToCollection, WithHeadingRow
 {

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Car;
 use App\Imports\CarsImport;
+use App\Models\Car;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CarsController extends Controller
@@ -93,7 +93,7 @@ class CarsController extends Controller
         return response()->json($cars);
     }
 
-    public function get(String $id)
+    public function get(string $id)
     {
         $car = Car::find($id);
         $domain = config('app.url');
@@ -104,7 +104,7 @@ class CarsController extends Controller
         return response()->json($car);
     }
 
-    public function update(Request $request, String $id)
+    public function update(Request $request, string $id)
     {
         $existingCar = Car::where('user_id', $request->user_id)->where('id', '!=', $id)->first();
         if ($existingCar) {
@@ -148,7 +148,7 @@ class CarsController extends Controller
         return response()->json($id);
     }
 
-    public function destroy(String $id)
+    public function destroy(string $id)
     {
         $product = Car::findOrFail($id);
         $product->delete();

@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class ScheduleLocation extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'schedule_id',
         'location',
         'lat_location',
         'long_location',
-    
+
     ];
 }

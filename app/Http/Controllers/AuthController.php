@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Enums\TokenAbility;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+
 class AuthController extends Controller
 {
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         // Xác thực yêu cầu
         $request->validate([
             'username' => 'required',
@@ -29,8 +31,8 @@ class AuthController extends Controller
             ], 404);
         }
         // Tạo token
-        $accessToken = $user->createToken('access_token', [TokenAbility::ACCESS_API->value], config('sanctum.expiration'));
-        $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value], config('sanctum.rt_expiration'));
+        $accessToken = $user->createToken('access_token', [TokenAbility::ACCESS_API->value]);
+        $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value]);
 
         return response()->json([
             'access_token' => $accessToken->plainTextToken,
@@ -39,11 +41,12 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(Request $request){
+    public function register(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
-            'username' =>'required',
-            'password' =>'required|min:5',
+            'username' => 'required',
+            'password' => 'required|min:5',
         ]);
         if ($validator->fails()) {
             return response()->json(
@@ -64,9 +67,12 @@ class AuthController extends Controller
             ]
         );
     }
-    public function user(Request $request){
+
+    public function user(Request $request)
+    {
         return $request->user();
     }
+
     public function logout()
     {
         auth()->user()->tokens()->delete();
@@ -74,7 +80,8 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
 
-    public function refresh(Request $request) {
+    public function refresh(Request $request)
+    {
         $request->user()->currentAccessToken()->delete();
 
         $accessToken = $request->user()->createToken('access_token', [TokenAbility::ACCESS_API->value], config('sanctum.expiration'));

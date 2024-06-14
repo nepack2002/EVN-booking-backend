@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
 {
@@ -28,7 +27,7 @@ class ForgotPasswordController extends Controller
             $user->password = Hash::make($newPassword);
             $user->save();
         }
-        Mail::send('forgot', [ 'newPassword' => $newPassword], function ($message) use ($request) {
+        Mail::send('forgot', ['newPassword' => $newPassword], function ($message) use ($request) {
             $message->to($request->email);
             $message->subject('Reset Password');
         });
@@ -36,6 +35,7 @@ class ForgotPasswordController extends Controller
             'message' => 'A reset link has been sent to your email address.'
         ], 200);
     }
+
     public function get()
     {
         return view('cars.index');

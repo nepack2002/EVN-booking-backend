@@ -2,9 +2,9 @@
 
 namespace App\Imports;
 
+use App\Models\Car;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use App\Models\Car;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class CarsImport implements ToCollection, WithHeadingRow

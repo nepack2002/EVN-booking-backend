@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Car;
 use App\Models\DeviceId;
 use App\Models\Notification;
 use App\Models\Schedule;
-use App\Models\Car;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;

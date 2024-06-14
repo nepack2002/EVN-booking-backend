@@ -4,9 +4,9 @@ namespace App\Console\Commands;
 
 use App\Models\Car;
 use App\Models\Notification;
-use Illuminate\Console\Command;
 use App\Models\Schedule;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class ScheduleNotification extends Command
 {

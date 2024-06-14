@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Schedule;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class Date extends Command
 {

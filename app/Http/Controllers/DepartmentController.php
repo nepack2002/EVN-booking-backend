@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Department;
-use Illuminate\Http\Request;
 use App\Imports\DepartmentsImport;
+use App\Models\Department;
 use App\Models\Schedule;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+
 class DepartmentController extends Controller
 {
     //lấy full
@@ -21,6 +22,7 @@ class DepartmentController extends Controller
         }
         return response()->json($departments);
     }
+
     public function index2()
     {
         $departments = Department::all()->toArray();
@@ -29,6 +31,7 @@ class DepartmentController extends Controller
 
         return response()->json($hierarchy);
     }
+
     private function buildHierarchy(array $departments, $parentId = null, $level = 0)
     {
         $result = [];
@@ -43,6 +46,7 @@ class DepartmentController extends Controller
         }
         return $result;
     }
+
     //thêm
     public function store(Request $request)
     {
@@ -55,11 +59,13 @@ class DepartmentController extends Controller
 
         return response()->json("Thành công");
     }
+
     //hiện chi tiết
     public function show(Department $department)
     {
         return response()->json($department);
     }
+
     //cập nhật
     public function update(Request $request, Department $department)
     {
@@ -73,6 +79,7 @@ class DepartmentController extends Controller
 
         return response()->json("Thành công");
     }
+
     //xóa
     public function destroy($id)
     {
@@ -88,6 +95,7 @@ class DepartmentController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
     public function import(Request $request)
     {
         $validator = Validator::make($request->all(), [

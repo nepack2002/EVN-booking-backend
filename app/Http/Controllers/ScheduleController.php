@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SchedulesImport;
 use App\Models\Car;
-use Illuminate\Http\Request;
 use App\Models\Schedule;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\SchedulesImport;
 
 class ScheduleController extends Controller
 {
@@ -22,10 +22,12 @@ class ScheduleController extends Controller
         }
         return response()->json($schedules);
     }
+
     public function show(Schedule $schedule)
     {
         return response()->json($schedule);
     }
+
     public function add(Request $request)
     {
         // Validate dữ liệu đầu vào từ request
@@ -85,6 +87,7 @@ class ScheduleController extends Controller
         $schedule->delete();
         return response()->json(['message' => 'Schedule deleted successfully'], 200);
     }
+
     public function import(Request $request)
     {
         // Validate the incoming request
@@ -107,6 +110,7 @@ class ScheduleController extends Controller
         // Return success response
         return response()->json(['success' => true]);
     }
+
     private function haversineDistance($lat1, $lon1, $lat2, $lon2)
     {
         // Convert độ sang radian
@@ -130,6 +134,7 @@ class ScheduleController extends Controller
 
         return $distance;
     }
+
     public function storeCoordinates(Request $request)
     {
         // Lấy dữ liệu `lat` và `long` từ request
