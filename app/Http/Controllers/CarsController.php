@@ -48,8 +48,8 @@ class CarsController extends Controller
             $car->so_khung = $request->so_khung;
             $car->so_cho = $request->so_cho;
             $car->so_dau_xang_tieu_thu = $request->so_dau_xang_tieu_thu;
-            $car->ngay_bao_duong_gan_nhat = Carbon::parse($request->ngay_bao_duong_gan_nhat)->format('Y-m-d');
-            $car->han_dang_kiem_tiep_theo = Carbon::parse($request->han_dang_kiem_tiep_theo)->format('Y-m-d');
+            $car->ngay_bao_duong_gan_nhat = Carbon::createFromFormat('d/m/Y',$request->ngay_bao_duong_gan_nhat)->format('Y-m-d');
+            $car->han_dang_kiem_tiep_theo = Carbon::createFromFormat('d/m/Y',$request->han_dang_kiem_tiep_theo)->format('Y-m-d');
             $car->location = $request->location;
             $car->lat_location = $request->lat_location;
             $car->long_location = $request->long_location;

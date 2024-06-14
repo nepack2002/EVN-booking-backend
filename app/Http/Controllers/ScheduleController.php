@@ -49,7 +49,7 @@ class ScheduleController extends Controller
             'participants' => 'required|string',
             'program' => 'required|string',
         ]);
-        $validatedData['datetime'] = Carbon::parse($validatedData['datetime'])->format('Y-m-d H:i:s');
+        $validatedData['datetime'] = Carbon::createFromFormat('d/m/Y H:i', $validatedData['datetime'])->format('Y-m-d H:i:s');
         // Tạo mới một schedule từ dữ liệu được validate
         $schedule = Schedule::create($validatedData);
 
@@ -77,7 +77,7 @@ class ScheduleController extends Controller
             'participants' => 'required|string',
             'program' => 'required|string',
         ]);
-        $validatedData['datetime'] = Carbon::parse($validatedData['datetime'])->format('Y-m-d H:i:s');
+        $validatedData['datetime'] = Carbon::createFromFormat('d/m/Y H:i', $validatedData['datetime'])->format('Y-m-d H:i:s');
 
         $schedule->update($validatedData);
 
