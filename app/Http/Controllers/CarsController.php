@@ -120,8 +120,8 @@ class CarsController extends Controller
             'dac_diem_mac_dinh' => 'required',
             'so_dau_xang_tieu_thu' => 'required',
             'ngay_bao_duong_gan_nhat' => 'required',
-            'han_dang_kiem_tiep_theo' => 'required', 
-            'anh_xe' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'han_dang_kiem_tiep_theo' => 'required',
+            'anh_xe' => 'image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 
         $car = Car::find($id);
