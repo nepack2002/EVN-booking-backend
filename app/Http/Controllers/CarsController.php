@@ -161,7 +161,7 @@ class CarsController extends Controller
     {
         $product = Car::findOrFail($id);
         $product->delete();
-        return response()->json(['message' => 'Sản phẩm đã được xoá thành công']);
+        return response()->json(['message' => 'Xe đã được xoá thành công']);
     }
 
     public function import(Request $request)

@@ -54,14 +54,14 @@ class ScheduleController extends Controller
         $schedule = Schedule::create($validatedData);
 
         // Trả về response thành công nếu tạo schedule thành công
-        return response()->json(['message' => 'Schedule created successfully', 'schedule' => $schedule], 201);
+        return response()->json(['message' => 'Tạo lịch trình thành công', 'schedule' => $schedule], 201);
     }
 
     public function update(Request $request, $id)
     {
         $schedule = Schedule::find($id);
         if (!$schedule) {
-            return response()->json(['message' => 'Schedule not found'], 404);
+            return response()->json(['message' => 'Lịch trình không tồn tại'], 404);
         }
 
         $validatedData = $request->validate([
@@ -88,10 +88,10 @@ class ScheduleController extends Controller
     {
         $schedule = Schedule::find($id);
         if (!$schedule) {
-            return response()->json(['message' => 'Schedule not found'], 404);
+            return response()->json(['message' => 'Lịch trình không tồn tại'], 404);
         }
         $schedule->delete();
-        return response()->json(['message' => 'Schedule deleted successfully'], 200);
+        return response()->json(['message' => 'Xoá lịch trình thành công'], 200);
     }
 
     public function import(Request $request)
