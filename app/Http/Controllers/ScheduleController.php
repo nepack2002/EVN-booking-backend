@@ -6,6 +6,7 @@ use App\Imports\SchedulesImport;
 use App\Models\Car;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -20,11 +21,15 @@ class ScheduleController extends Controller
         } else {
             $schedules = Schedule::paginate(5);
         }
+        foreach ($schedules as $schedule) {
+            $schedule->datetime = Carbon::parse($schedule->datetime)->format('d/m/Y H:i');
+        }
         return response()->json($schedules);
     }
 
     public function show(Schedule $schedule)
     {
+        $schedule->datetime = Carbon::parse($schedule->datetime)->format('d/m/Y H:i');
         return response()->json($schedule);
     }
 
