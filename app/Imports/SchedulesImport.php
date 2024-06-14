@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Schedule;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -20,11 +21,7 @@ class SchedulesImport implements ToCollection, WithHeadingRow
                 'department_id' => 'required|exists:departments,id',
                 'datetime' => 'required|date',
                 'location' => 'required|string',
-                'lat_location' => 'nullable|numeric',
-                'long_location' => 'nullable|numeric',
                 'location_2' => 'required|string',
-                'lat_location_2' => 'nullable|numeric',
-                'long_location_2' => 'nullable|numeric',
                 'car_id' => 'required|exists:cars,id',
                 'participants' => 'required|string',
                 'program' => 'required|string',
@@ -34,10 +31,9 @@ class SchedulesImport implements ToCollection, WithHeadingRow
             }
             Schedule::create([
                 'department_id' => $row['department_id'],
-                'datetime' => $row['datetime'],
+                'datetime' => Carbon::createFromFormat('d/m/Y H:i',$row['datetime'])->format('Y-m-d H:i:s'),
                 'location' => $row['location'],
-                'lat_location' => $row['lat_location'],
-                'long_location' => $row['long_location'],
+                'location_2' => $row['location_2'],
                 'car_id' => $row['car_id'],
                 'participants' => $row['participants'],
                 'program' => $row['program'],

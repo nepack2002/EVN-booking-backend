@@ -25,10 +25,12 @@ class CarsController extends Controller
             'user_id' => 'required',
             'bien_so_xe' => 'required|unique:cars,bien_so_xe',
             'so_khung' => 'required|unique:cars,so_khung',
+            'so_may' => 'required|unique:cars,so_may',
             'so_cho' => 'required',
             'so_dau_xang_tieu_thu' => 'required',
             'ngay_bao_duong_gan_nhat' => 'required|date_format:d/m/Y',
             'han_dang_kiem_tiep_theo' => 'required|date_format:d/m/Y',
+            'ngay_sua_chua_lon_gan_nhat' => 'required|date_format:d/m/Y',
             'anh_xe' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
             'location' => 'required',
             'lat_location' => 'required',
@@ -50,6 +52,7 @@ class CarsController extends Controller
             $car->so_dau_xang_tieu_thu = $request->so_dau_xang_tieu_thu;
             $car->ngay_bao_duong_gan_nhat = Carbon::createFromFormat('d/m/Y',$request->ngay_bao_duong_gan_nhat)->format('Y-m-d');
             $car->han_dang_kiem_tiep_theo = Carbon::createFromFormat('d/m/Y',$request->han_dang_kiem_tiep_theo)->format('Y-m-d');
+            $car->ngay_sua_chua_lon_gan_nhat = Carbon::createFromFormat('d/m/Y',$request->ngay_sua_chua_lon_gan_nhat)->format('Y-m-d');
             $car->location = $request->location;
             $car->lat_location = $request->lat_location;
             $car->long_location = $request->long_location;
@@ -106,6 +109,11 @@ class CarsController extends Controller
         $imageUrl = asset($imagePath);
         $imageUrl = $domain . $imageUrl;
         $car->anh_xe = $imageUrl;
+
+        $car->ngay_bao_duong_gan_nhat = $car->ngay_bao_duong_gan_nhat ? \Illuminate\Support\Carbon::parse($car->ngay_bao_duong_gan_nhat)->format('d/m/Y') : null;
+        $car->han_dang_kiem_tiep_theo = $car->han_dang_kiem_tiep_theo ? \Illuminate\Support\Carbon::parse($car->han_dang_kiem_tiep_theo)->format('d/m/Y') : null;
+        $car->ngay_sua_chua_lon_gan_nhat = $car->ngay_sua_chua_lon_gan_nhat ? \Illuminate\Support\Carbon::parse($car->ngay_sua_chua_lon_gan_nhat)->format('d/m/Y') : null;
+
         return response()->json($car);
     }
 
@@ -121,10 +129,12 @@ class CarsController extends Controller
             'user_id' => 'required',
             'bien_so_xe' => 'required|unique:cars,bien_so_xe,' . $id . ',id',
             'so_khung' => 'required|unique:cars,so_khung,' . $id . ',id',
+            'so_may' => 'required|unique:cars,so_may,' . $id . ',id',
             'so_cho' => 'required',
             'so_dau_xang_tieu_thu' => 'required',
             'ngay_bao_duong_gan_nhat' => 'required|date_format:d/m/Y',
             'han_dang_kiem_tiep_theo' => 'required|date_format:d/m/Y',
+            'ngay_sua_chua_lon_gan_nhat' => 'required|date_format:d/m/Y',
             'anh_xe' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
             'location' => 'required',
             'lat_location' => 'required',
@@ -139,8 +149,9 @@ class CarsController extends Controller
         $car->so_khung = $request->so_khung;
         $car->so_cho = $request->so_cho;
         $car->so_dau_xang_tieu_thu = $request->so_dau_xang_tieu_thu;
-        $car->ngay_bao_duong_gan_nhat = Carbon::parse($request->ngay_bao_duong_gan_nhat)->format('Y-m-d');
-        $car->han_dang_kiem_tiep_theo = Carbon::parse($request->han_dang_kiem_tiep_theo)->format('Y-m-d');
+        $car->ngay_bao_duong_gan_nhat = Carbon::createFromFormat('d/m/Y',$request->ngay_bao_duong_gan_nhat)->format('Y-m-d');
+        $car->han_dang_kiem_tiep_theo = Carbon::createFromFormat('d/m/Y',$request->han_dang_kiem_tiep_theo)->format('Y-m-d');
+        $car->ngay_sua_chua_lon_gan_nhat = Carbon::createFromFormat('d/m/Y',$request->ngay_sua_chua_lon_gan_nhat)->format('Y-m-d');
         $car->location = $request->location;
         $car->lat_location = $request->lat_location;
         $car->long_location = $request->long_location;
