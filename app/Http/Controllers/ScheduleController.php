@@ -33,7 +33,7 @@ class ScheduleController extends Controller
         // Validate dữ liệu đầu vào từ request
         $validatedData = $request->validate([
             'department_id' => 'required|exists:departments,id',
-            'datetime' => 'required|date',
+            'datetime' => 'required|date_format:d/m/Y H:i',
             'location' => 'required|string',
             'lat_location' => 'nullable|numeric',
             'long_location' => 'nullable|numeric',
@@ -61,7 +61,7 @@ class ScheduleController extends Controller
 
         $request->validate([
             'department_id' => 'required|exists:departments,id',
-            'datetime' => 'required|date',
+            'datetime' => 'required|date_format:d/m/Y H:i',
             'location' => 'required|string',
             'lat_location' => 'nullable|numeric',
             'long_location' => 'nullable|numeric',

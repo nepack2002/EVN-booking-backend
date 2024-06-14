@@ -25,11 +25,13 @@ class CarsController extends Controller
             'bien_so_xe' => 'required|unique:cars,bien_so_xe',
             'so_khung' => 'required|unique:cars,so_khung',
             'so_cho' => 'required',
-            'dac_diem_mac_dinh' => 'required',
             'so_dau_xang_tieu_thu' => 'required',
-            'ngay_bao_duong_gan_nhat' => 'required',
-            'han_dang_kiem_tiep_theo' => 'required',
+            'ngay_bao_duong_gan_nhat' => 'required|date_format:d/m/Y',
+            'han_dang_kiem_tiep_theo' => 'required|date_format:d/m/Y',
             'anh_xe' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'location' => 'required',
+            'lat_location' => 'required',
+            'long_location' => 'required',
         ]);
 
         if ($request->hasFile('anh_xe') && $request->file('anh_xe')->isValid()) {
@@ -44,10 +46,12 @@ class CarsController extends Controller
             $car->bien_so_xe = $request->bien_so_xe;
             $car->so_khung = $request->so_khung;
             $car->so_cho = $request->so_cho;
-            $car->dac_diem_mac_dinh = $request->dac_diem_mac_dinh;
             $car->so_dau_xang_tieu_thu = $request->so_dau_xang_tieu_thu;
             $car->ngay_bao_duong_gan_nhat = $request->ngay_bao_duong_gan_nhat;
             $car->han_dang_kiem_tiep_theo = $request->han_dang_kiem_tiep_theo;
+            $car->location = $request->location;
+            $car->lat_location = $request->lat_location;
+            $car->long_location = $request->long_location;
             $car->anh_xe = $file_path;
 
             $car->save();
@@ -117,11 +121,13 @@ class CarsController extends Controller
             'bien_so_xe' => 'required|unique:cars,bien_so_xe,' . $id . ',id',
             'so_khung' => 'required|unique:cars,so_khung,' . $id . ',id',
             'so_cho' => 'required',
-            'dac_diem_mac_dinh' => 'required',
             'so_dau_xang_tieu_thu' => 'required',
-            'ngay_bao_duong_gan_nhat' => 'required',
-            'han_dang_kiem_tiep_theo' => 'required',
-            'anh_xe' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'ngay_bao_duong_gan_nhat' => 'required|date_format:d/m/Y',
+            'han_dang_kiem_tiep_theo' => 'required|date_format:d/m/Y',
+            'anh_xe' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'location' => 'required',
+            'lat_location' => 'required',
+            'long_location' => 'required',
         ]);
 
         $car = Car::find($id);
@@ -131,10 +137,12 @@ class CarsController extends Controller
         $car->bien_so_xe = $request->bien_so_xe;
         $car->so_khung = $request->so_khung;
         $car->so_cho = $request->so_cho;
-        $car->dac_diem_mac_dinh = $request->dac_diem_mac_dinh;
         $car->so_dau_xang_tieu_thu = $request->so_dau_xang_tieu_thu;
         $car->ngay_bao_duong_gan_nhat = $request->ngay_bao_duong_gan_nhat;
         $car->han_dang_kiem_tiep_theo = $request->han_dang_kiem_tiep_theo;
+        $car->location = $request->location;
+        $car->lat_location = $request->lat_location;
+        $car->long_location = $request->long_location;
 
         if ($request->hasFile('anh_xe')) {
             $file_name = $request->file('anh_xe')->getClientOriginalName();
