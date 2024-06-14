@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Imports\CarsImport;
 use App\Models\Car;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -47,8 +48,8 @@ class CarsController extends Controller
             $car->so_khung = $request->so_khung;
             $car->so_cho = $request->so_cho;
             $car->so_dau_xang_tieu_thu = $request->so_dau_xang_tieu_thu;
-            $car->ngay_bao_duong_gan_nhat = $request->ngay_bao_duong_gan_nhat;
-            $car->han_dang_kiem_tiep_theo = $request->han_dang_kiem_tiep_theo;
+            $car->ngay_bao_duong_gan_nhat = Carbon::parse($request->ngay_bao_duong_gan_nhat)->format('Y-m-d');
+            $car->han_dang_kiem_tiep_theo = Carbon::parse($request->han_dang_kiem_tiep_theo)->format('Y-m-d');
             $car->location = $request->location;
             $car->lat_location = $request->lat_location;
             $car->long_location = $request->long_location;
@@ -138,8 +139,8 @@ class CarsController extends Controller
         $car->so_khung = $request->so_khung;
         $car->so_cho = $request->so_cho;
         $car->so_dau_xang_tieu_thu = $request->so_dau_xang_tieu_thu;
-        $car->ngay_bao_duong_gan_nhat = $request->ngay_bao_duong_gan_nhat;
-        $car->han_dang_kiem_tiep_theo = $request->han_dang_kiem_tiep_theo;
+        $car->ngay_bao_duong_gan_nhat = Carbon::parse($request->ngay_bao_duong_gan_nhat)->format('Y-m-d');
+        $car->han_dang_kiem_tiep_theo = Carbon::parse($request->han_dang_kiem_tiep_theo)->format('Y-m-d');
         $car->location = $request->location;
         $car->lat_location = $request->lat_location;
         $car->long_location = $request->long_location;

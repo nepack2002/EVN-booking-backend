@@ -49,7 +49,7 @@ class ScheduleController extends Controller
             'participants' => 'required|string',
             'program' => 'required|string',
         ]);
-
+        $validatedData['datetime'] = Carbon::parse($validatedData['datetime'])->format('Y-m-d H:i:s');
         // Tạo mới một schedule từ dữ liệu được validate
         $schedule = Schedule::create($validatedData);
 
@@ -64,7 +64,7 @@ class ScheduleController extends Controller
             return response()->json(['message' => 'Schedule not found'], 404);
         }
 
-        $request->validate([
+        $validatedData = $request->validate([
             'department_id' => 'required|exists:departments,id',
             'datetime' => 'required|date_format:d/m/Y H:i',
             'location' => 'required|string',
@@ -77,8 +77,9 @@ class ScheduleController extends Controller
             'participants' => 'required|string',
             'program' => 'required|string',
         ]);
+        $validatedData['datetime'] = Carbon::parse($validatedData['datetime'])->format('Y-m-d H:i:s');
 
-        $schedule->update($request->all());
+        $schedule->update($validatedData);
 
         return response()->json($schedule, 200);
     }
