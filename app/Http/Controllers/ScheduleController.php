@@ -150,8 +150,10 @@ class ScheduleController extends Controller
         // Tính toán khoảng cách với từng car
         $cars = Car::all();
         $distances = [];
+        $carsFormat = [];
 
         foreach ($cars as $car) {
+            $carsFormat[$car->id] = $car;
             $carLat = $car->lat_location;
             $carLong = $car->long_location;
 
@@ -172,7 +174,7 @@ class ScheduleController extends Controller
         $carsWithDistance = [];
         foreach ($distances as $carId => $distance) {
             // Lấy tên của xe
-            $carName = Car::find($carId)->ten_xe;
+            $carName = $carsFormat[$carId]->ten_xe;
 
             // Tạo mảng chứa thông tin về xe và khoảng cách
             $carWithDistance = [
