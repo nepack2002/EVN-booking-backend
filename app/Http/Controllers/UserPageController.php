@@ -86,6 +86,7 @@ class UserPageController extends Controller
         $scheduleLocation->location = $request->input('location');
         $car->save();
         $scheduleLocation->save();
+        return response()->json(['message' => 'Car location updated successfully']);
     }
 
     public function x(Request $request, $id)
