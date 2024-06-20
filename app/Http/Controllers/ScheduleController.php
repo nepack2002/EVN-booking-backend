@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Console\Commands\NotificationGenerate;
 use App\Imports\SchedulesImport;
 use App\Models\Car;
+use App\Models\Notification;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -49,10 +51,20 @@ class ScheduleController extends Controller
             'participants' => 'required|string',
             'program' => 'required|string',
         ]);
+        $dateTimeBackup =$validatedData['datetime'];
         $validatedData['datetime'] = Carbon::createFromFormat('d/m/Y H:i', $validatedData['datetime'])->format('Y-m-d H:i:s');
         // Tạo mới một schedule từ dữ liệu được validate
         $schedule = Schedule::create($validatedData);
 
+        $car = Car::findOrFail($validatedData['car_id']);
+        if (!empty($car->user_id)) {
+            $message = "Bạn vừa được phân công lịch {$validatedData['program']}. Lịch trình bắt đầu lúc {$dateTimeBackup}. Địa điểm di chuyển từ {$validatedData['location']} tới {$validatedData['location_2']}";
+            $notification = new Notification();
+            $notification->user_id = $car->user_id;
+            $notification->message = $message;
+            $notification->save();
+            NotificationGenerate::sendNotificationByUserId($car->user_id, $message);
+        }
         // Trả về response thành công nếu tạo schedule thành công
         return response()->json(['message' => 'Tạo lịch trình thành công', 'schedule' => $schedule], 201);
     }
