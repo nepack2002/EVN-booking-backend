@@ -9,6 +9,7 @@ use App\Models\ScheduleLocation;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class UserPageController extends Controller
 {
@@ -69,23 +70,54 @@ class UserPageController extends Controller
         $schedule->status = $request->input('status');
         $schedule->save();
 
-        return response()->json(['message' => 'Car run value updated successfully']);
+        $scheduleLocations = ScheduleLocation::where('schedule_id', $id)->orderBy('created_at', 'ASC')->get();
+        $startLocationsString = $schedule->lat_location . ',' . $schedule->long_location;
 
+        $locations = [];
+        foreach ($scheduleLocations as $scheduleLocation) {
+            $locations[] = $scheduleLocation->lat . ',' . $scheduleLocation->long;
+        }
+        $locationsString = implode('|', $locations);
+
+        $apiKey = env('GOONG_API_KEY');
+        $response = Http::get("https://rsapi.goong.io/DistanceMatrix?origins=$startLocationsString&destinations=$locationsString&vehicle=car&api_key=$apiKey");
+        if ($response->successful()) {
+            $car = Car::findOrFail($schedule->car_id);
+
+            $rows = $response->json('rows');
+            $row = $rows[0];
+            $elements = $row["elements"];
+            foreach ($elements as $k => $element) {
+                $scheduleLocations[$k]->so_dau_xang_tieu_thu = ($element["distance"]["value"]/1000) * ($car->so_dau_xang_tieu_thu/100);
+                $scheduleLocations[$k]->save();
+            }
+        }
+        return response()->json(['message' => 'Car run value updated successfully']);
     }
 
     public function sendLocation(Request $request, $id)
     {
+        $lat = $request->input('lat_location');
+        $long = $request->input('long_location');
+        $location = $request->input('location');
+
         $carId = Schedule::findOrFail($id)->pluck('car_id')->first();
         $car = Car::findOrFail($carId);
-        $scheduleLocation = new ScheduleLocation();
-        $car->lat_location = $request->input('lat_location');
-        $car->long_location = $request->input('long_location');
-        $scheduleLocation->schedule_id = $id;
-        $scheduleLocation->lat = $request->input('lat_location');
-        $scheduleLocation->long = $request->input('long_location');
-        $scheduleLocation->location = $request->input('location');
+
+        $car->lat_location = $lat;
+        $car->long_location = $long;
+        $car->location = $location;
         $car->save();
+
+        $scheduleLocation = new ScheduleLocation();
+        $scheduleLocation->schedule_id = $id;
+        $scheduleLocation->lat = $lat;
+        $scheduleLocation->long = $long;
+        $scheduleLocation->location = $location;
+
+
         $scheduleLocation->save();
+
         return response()->json(['message' => 'Car location updated successfully']);
     }
 

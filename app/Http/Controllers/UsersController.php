@@ -21,7 +21,7 @@ class UsersController extends Controller
                 ->where('name', 'like', '%' . $query . '%')
                 ->paginate(5);
         } else {
-            $users = User::with(['car', 'department'])->paginate(5);
+            $users = User::with(['car', 'department'])->where('role' , 'user')->get();
         }
 
         return response()->json($users);

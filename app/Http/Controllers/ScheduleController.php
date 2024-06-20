@@ -146,9 +146,10 @@ class ScheduleController extends Controller
         // Lấy dữ liệu `lat` và `long` từ request
         $lat = $request->lat ?? null;
         $long = $request->long ?? null;
+        $soCho = $request->so_cho ?? 0;
 
         // Tính toán khoảng cách với từng car
-        $cars = Car::all();
+        $cars = Car::where('so_cho', '>=', $soCho)->orderBy('so_cho', 'ASC')->get();
         $distances = [];
         $carsFormat = [];
 
@@ -166,10 +167,21 @@ class ScheduleController extends Controller
             }
 
             // Lưu khoảng cách vào mảng
-            $distances[$car->id] = $distance;
+            $distances[$car->id] = [
+                "distance" => $distance,
+                "so_cho" => $car->so_cho,
+            ];
         }
 
-        asort($distances);
+        uasort($distances, function ($a, $b) {
+            // First, compare so_cho
+            if ($a['so_cho'] == $b['so_cho']) {
+                // If so_cho is the same, compare distance
+                return $a['distance'] <=> $b['distance'];
+            }
+            // Otherwise, compare so_cho
+            return $a['so_cho'] <=> $b['so_cho'];
+        });
 
         $carsWithDistance = [];
         foreach ($distances as $carId => $distance) {
@@ -180,7 +192,8 @@ class ScheduleController extends Controller
             $carWithDistance = [
                 'car_id' => $carId,
                 'name' => $carName,
-                'distance' => $distance
+                'distance' => $distance["distance"],
+                'so_cho' => $distance["so_cho"],
             ];
             $carsWithDistance[] = $carWithDistance;
         }

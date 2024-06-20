@@ -35,6 +35,7 @@ class CarsController extends Controller
             'location' => 'required',
             'lat_location' => 'required',
             'long_location' => 'required',
+            'theo_doi_vi_tri' => 'required',
         ]);
 
         if ($request->hasFile('anh_xe') && $request->file('anh_xe')->isValid()) {
@@ -56,6 +57,7 @@ class CarsController extends Controller
             $car->location = $request->location;
             $car->lat_location = $request->lat_location;
             $car->long_location = $request->long_location;
+            $car->theo_doi_vi_tri = $request->theo_doi_vi_tri;
             $car->anh_xe = $file_path;
 
             $car->save();
@@ -139,6 +141,7 @@ class CarsController extends Controller
             'location' => 'required',
             'lat_location' => 'required',
             'long_location' => 'required',
+            'theo_doi_vi_tri' => 'required',
         ]);
 
         $car = Car::find($id);
@@ -155,6 +158,7 @@ class CarsController extends Controller
         $car->location = $request->location;
         $car->lat_location = $request->lat_location;
         $car->long_location = $request->long_location;
+        $car->theo_doi_vi_tri = $request->theo_doi_vi_tri;
 
         if ($request->hasFile('anh_xe')) {
             $file_name = $request->file('anh_xe')->getClientOriginalName();
