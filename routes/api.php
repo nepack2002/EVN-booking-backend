@@ -18,6 +18,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         //UsersController
         Route::controller(UsersController::class)->group(function () {
             Route::get('/users', 'getUser');
+            Route::get('/drivers', 'getDriver');
             Route::get('/users/{id}', 'get');
             Route::post('/users/{id}', 'update');
             Route::post('/users', 'create');
@@ -61,6 +62,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::middleware('qtvt')->group(function () {
         Route::get('/users', [UsersController::class, 'getUser']);
+        Route::get('/drivers', [UsersController::class, 'getDriver']);
         //CarsController
         Route::controller(CarsController::class)->group(function () {
             Route::get('/cars', 'getCar');
