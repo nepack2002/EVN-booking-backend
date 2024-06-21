@@ -77,9 +77,10 @@ class NotificationGenerate extends Command
             // Kiểm tra hạn bảo dưỡng gần nhất da duoc 6 thang hay chua
             $diffInDays = $currentTime->diffInDays($car->ngay_bao_duong_gan_nhat);
             if ($diffInDays >= 180) {
+                $message = "Đã $diffInDays ngày từ ngày bảo dưỡng gần nhất của xe {$car->ten_xe} - {$car->bien_so_xe}. Bạn lưu ý đưa xe bảo dưỡng đúng ngày";
                 $notification = new Notification();
                 $notification->user_id = $user_ids[$car->id];
-                $notification->message = "Đã $diffInDays ngày từ ngày bảo dưỡng gần nhất của xe {$car->ten_xe} - {$car->bien_so_xe}. Bạn lưu ý đưa xe bảo dưỡng đúng ngày";
+                $notification->message = $message;
                 $notification->save();
 
                 //Gui thong bao cho admin
@@ -95,9 +96,10 @@ class NotificationGenerate extends Command
             // Kiểm tra hạn bảo dưỡng gần nhất da duoc 6 thang hay chua
             $diffInDays = $currentTime->diffInDays($car->ngay_sua_chua_lon_gan_nhat);
             if ($diffInDays >= 180) {
+                $message = "Đã $diffInDays ngày từ sửa chữa lớn gần nhất của xe {$car->ten_xe} - {$car->bien_so_xe}. Bạn lưu ý đưa xe bảo dưỡng đúng ngày";
                 $notification = new Notification();
                 $notification->user_id = $user_ids[$car->id];
-                $notification->message = "Đã $diffInDays ngày từ sửa chữa lớn gần nhất của xe {$car->ten_xe} - {$car->bien_so_xe}. Bạn lưu ý đưa xe bảo dưỡng đúng ngày";
+                $notification->message = $message;
                 $notification->save();
 
                 //Gui thong bao cho admin
