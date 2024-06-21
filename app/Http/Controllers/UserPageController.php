@@ -66,8 +66,17 @@ class UserPageController extends Controller
 
     public function updateRun(Request $request, $id)
     {
+        $userId = $request->user()->id;
+        if ($request->input('status') == '1') {
+            $cars = Car::where('user_id', $userId)->pluck('id');
+            $checkIsThereAnyRunningSchedule = Schedule::whereIn('car_id', $cars)->where('status', '1')->get();
+            if (!$checkIsThereAnyRunningSchedule->isEmpty()) {
+                return response()->json(['message' => 'Đang trong một chuyến đi khác']);
+            }
+        }
         $schedule = Schedule::findOrFail($id);
         $schedule->status = $request->input('status');
+        $schedule->total_running_time = $request->input('total_running_time');
         $schedule->save();
 
         //ket thuc chuyen di thi tinh toan duong dau xang tieu thu
@@ -135,15 +144,30 @@ class UserPageController extends Controller
 
     public function getSchedulesGroupedByDate($userId)
     {
-        $now = Carbon::now();
+        $now = Carbon::today();
         $cars = Car::where('user_id', $userId)->pluck('id');
-        $schedules = Schedule::with('car')->where('datetime', '>=', $now)
+        $schedules = Schedule::with('car')
             ->whereIn('car_id', $cars)
+            ->where(function ($query) use ($now) {
+                $query->where('datetime', '>=', $now)
+                    ->orWhere('status', '=', '1');
+            })
             ->orderBy('datetime')
             ->get()
             ->groupBy(function ($date) {
                 return Carbon::parse($date->datetime)->format('Y-m-d');
             });
+
+        return response()->json($schedules);
+    }
+
+    public function getCurrentRunningSchedule($userId)
+    {
+        $cars = Car::where('user_id', $userId)->pluck('id');
+        $schedules = Schedule::with('car')
+            ->whereIn('car_id', $cars)
+            ->where('status', '=', '1')
+            ->first();
 
         return response()->json($schedules);
     }

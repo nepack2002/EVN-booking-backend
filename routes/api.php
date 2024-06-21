@@ -98,6 +98,7 @@ Route::post('/forgotPassword', [ForgotPasswordController::class, 'forgotPassword
 
 Route::get('users/{userId}/schedules', [UserPageController::class, 'getUserSchedules']);
 Route::get('users/{userId}/schedulesDate', [UserPageController::class, 'getSchedulesGroupedByDate']);
+Route::get('users/{userId}/currentRunningSchedule', [UserPageController::class, 'getCurrentRunningSchedule']);
 Route::get('users/ScheduleLocation/{id}',[UserPageController::class, 'getLocation']);
 Route::get('users/schedule/{schedule}', [UserPageController::class, 'getDetail']);
 Route::get('users/notification/{id}', [UserPageController::class, 'getNotification']);
