@@ -7,6 +7,7 @@ use App\Models\Car;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CarsController extends Controller
@@ -181,12 +182,14 @@ class CarsController extends Controller
 
     public function import(Request $request)
     {
-        $request->validate([
-            'file' => 'required|file',
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|mimes:xls,xlsx'
         ]);
 
-        $path = $request->file('file')->getRealPath();
-        $data = Excel::import(new CarsImport, $path);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $data = Excel::import(new CarsImport, $request->file('file'));
 
         return response()->json($data);
     }

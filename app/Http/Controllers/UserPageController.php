@@ -21,7 +21,7 @@ class UserPageController extends Controller
 
     public function getCarOfUser(string $id)
     {
-        $car = Car::where('user_id', $id)->first();
+        $car = Car::where('user_id', $id)->get();
         if ($car) {
             return response()->json($car);
         } else {

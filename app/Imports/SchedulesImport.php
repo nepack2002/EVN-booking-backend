@@ -35,7 +35,7 @@ class SchedulesImport implements ToCollection, WithHeadingRow
             $car = Car::where('bien_so_xe', $row['bien_so_xe'])->first();
             Schedule::create([
                 'department_id' => $department->id,
-                'datetime' => Carbon::createFromFormat('d/m/Y H:i',$row['thoi_gian_bat_dau'])->format('Y-m-d H:i:s'),
+                'datetime' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['thoi_gian_bat_dau'])->format('Y-m-d H:i:s'),
                 'location' => $row['diem_xuat_phat'],
                 'location_2' => $row['diem_ket_thuc'],
                 'car_id' => $car->id,

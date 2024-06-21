@@ -14,6 +14,6 @@ class ScheduleLocation extends Model
         'location',
         'lat_location',
         'long_location',
-
+        'so_dau_xang_tieu_thu'
     ];
 }

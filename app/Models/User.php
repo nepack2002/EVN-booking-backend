@@ -48,7 +48,7 @@ class User extends Authenticatable
 
     public function car()
     {
-        return $this->hasOne(Car::class, 'user_id');
+        return $this->hasMany(Car::class);
     }
 
     public function department()

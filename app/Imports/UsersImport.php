@@ -17,7 +17,7 @@ class UsersImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            $user = User::where('username', $row['ten_dang_nhap'])->first();
+            $user = User::where('username', '=', $row['ten_dang_nhap'])->first();
             $department = Department::where('name','=',$row['ten_phong_ban'])->first();
             if ($user) {
                 $user->update([
