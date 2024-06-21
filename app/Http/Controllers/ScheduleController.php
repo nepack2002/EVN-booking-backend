@@ -63,7 +63,9 @@ class ScheduleController extends Controller
             $notification->user_id = $car->user_id;
             $notification->message = $message;
             $notification->save();
-            NotificationGenerate::sendNotificationByUserId($car->user_id, $message);
+
+            $notificationGen = new NotificationGenerate();
+            $notificationGen->sendNotificationByUserId($car->user_id, $message);
         }
         // Trả về response thành công nếu tạo schedule thành công
         return response()->json(['message' => 'Tạo lịch trình thành công', 'schedule' => $schedule], 201);
