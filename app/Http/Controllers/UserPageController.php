@@ -70,26 +70,29 @@ class UserPageController extends Controller
         $schedule->status = $request->input('status');
         $schedule->save();
 
-        $scheduleLocations = ScheduleLocation::where('schedule_id', $id)->orderBy('created_at', 'ASC')->get();
-        $startLocationsString = $schedule->lat_location . ',' . $schedule->long_location;
+        //ket thuc chuyen di thi tinh toan duong dau xang tieu thu
+        if ($request->input('status') == '2') {
+            $scheduleLocations = ScheduleLocation::where('schedule_id', $id)->orderBy('created_at', 'ASC')->get();
+            $startLocationsString = $schedule->lat_location . ',' . $schedule->long_location;
 
-        $locations = [];
-        foreach ($scheduleLocations as $scheduleLocation) {
-            $locations[] = $scheduleLocation->lat . ',' . $scheduleLocation->long;
-        }
-        $locationsString = implode('|', $locations);
+            $locations = [];
+            foreach ($scheduleLocations as $scheduleLocation) {
+                $locations[] = $scheduleLocation->lat . ',' . $scheduleLocation->long;
+            }
+            $locationsString = implode('|', $locations);
 
-        $apiKey = env('GOONG_API_KEY');
-        $response = Http::get("https://rsapi.goong.io/DistanceMatrix?origins=$startLocationsString&destinations=$locationsString&vehicle=car&api_key=$apiKey");
-        if ($response->successful()) {
-            $car = Car::findOrFail($schedule->car_id);
+            $apiKey = env('GOONG_API_KEY');
+            $response = Http::get("https://rsapi.goong.io/DistanceMatrix?origins=$startLocationsString&destinations=$locationsString&vehicle=car&api_key=$apiKey");
+            if ($response->successful()) {
+                $car = Car::findOrFail($schedule->car_id);
 
-            $rows = $response->json('rows');
-            $row = $rows[0];
-            $elements = $row["elements"];
-            foreach ($elements as $k => $element) {
-                $scheduleLocations[$k]->so_dau_xang_tieu_thu = ($element["distance"]["value"]/1000) * ($car->so_dau_xang_tieu_thu/100);
-                $scheduleLocations[$k]->save();
+                $rows = $response->json('rows');
+                $row = $rows[0];
+                $elements = $row["elements"];
+                foreach ($elements as $k => $element) {
+                    $scheduleLocations[$k]->so_dau_xang_tieu_thu = ($element["distance"]["value"]/1000) * ($car->so_dau_xang_tieu_thu/100);
+                    $scheduleLocations[$k]->save();
+                }
             }
         }
         return response()->json(['message' => 'Car run value updated successfully']);
