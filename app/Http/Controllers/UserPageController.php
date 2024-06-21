@@ -76,7 +76,6 @@ class UserPageController extends Controller
         }
         $schedule = Schedule::findOrFail($id);
         $schedule->status = $request->input('status');
-        $schedule->total_running_time = $request->input('total_running_time');
         $schedule->save();
 
         //ket thuc chuyen di thi tinh toan duong dau xang tieu thu
@@ -130,7 +129,20 @@ class UserPageController extends Controller
 
         $scheduleLocation->save();
 
+        $schedule = Schedule::findOrFail($id);
+        $schedule->total_running_time = request()->input('total_running_time');
+        $schedule->save();
+
         return response()->json(['message' => 'Car location updated successfully']);
+    }
+
+    public function sendTime(Request $request, $id)
+    {
+        $schedule = Schedule::findOrFail($id);
+        $schedule->total_running_time = request()->input('total_running_time');
+        $schedule->save();
+
+        return response()->json(['message' => 'Car running time updated successfully']);
     }
 
     public function x(Request $request, $id)
