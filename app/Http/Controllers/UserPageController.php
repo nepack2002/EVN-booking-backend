@@ -69,7 +69,7 @@ class UserPageController extends Controller
         $userId = $request->user()->id;
         if ($request->input('status') == '1') {
             $cars = Car::where('user_id', $userId)->pluck('id');
-            $checkIsThereAnyRunningSchedule = Schedule::whereIn('car_id', $cars)->where('status', '1')->get();
+            $checkIsThereAnyRunningSchedule = Schedule::whereIn('car_id', $cars)->where('status', '1')->orWhere('status', '3')->get();
             if (!$checkIsThereAnyRunningSchedule->isEmpty()) {
                 return response()->json(['message' => 'Đang trong một chuyến đi khác']);
             }
@@ -167,6 +167,7 @@ class UserPageController extends Controller
         $schedules = Schedule::with('car')
             ->whereIn('car_id', $cars)
             ->where('status', '=', '1')
+            ->orWhere('status', '=', '3')
             ->first();
 
         return response()->json($schedules);
