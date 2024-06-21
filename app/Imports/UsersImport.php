@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Department;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
@@ -16,23 +17,24 @@ class UsersImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            $user = User::where('username', $row['username'])->first();
+            $user = User::where('username', $row['ten_dang_nhap'])->first();
+            $department = Department::where('name','=',$row['ten_phong_ban'])->first();
             if ($user) {
                 $user->update([
-                    'name' => $row['name'],
-                    'role' => $row['role'],
-                    'phone' => $row['phone'],
-                    'department_id' => $row['department_id'],
-                    'password' => Hash::make($row['password']),
+                    'name' => $row['ho_ten'],
+                    'role' => $row['vai_tro'],
+                    'phone' => $row['so_dien_thoai'],
+                    'department_id' => $department->id??'',
+                    'password' => Hash::make($row['mat_khau']),
                 ]);
             } else {
                 User::create([
-                    'name' => $row['name'],
-                    'username' => $row['username'],
-                    'role' => $row['role'],
-                    'phone' => $row['phone'],
-                    'department_id' => $row['department_id'],
-                    'password' => Hash::make($row['password']), // Hash mật khẩu trước khi lưu
+                    'name' => $row['ho_ten'],
+                    'username' => $row['ten_dang_nhap'],
+                    'role' => $row['vai_tro'],
+                    'phone' => $row['so_dien_thoai'],
+                    'department_id' => $department->id??'',
+                    'password' => Hash::make($row['mat_khau']),
                 ]);
             }
         }

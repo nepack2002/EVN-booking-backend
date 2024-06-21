@@ -17,17 +17,24 @@ class DepartmentsImport implements ToCollection, WithHeadingRow
     {
         foreach ($rows as $row) {
             $validator = Validator::make($row->toArray(), [
-                'name' => 'required|string|max:255',
-                'parent_id' => 'nullable|exists:departments,id',
+                'ten_phong_ban' => 'required|string|max:255',
+                'phong_ban_cap_tren' => 'nullable|exists:departments,name',
             ]);
 
             if ($validator->fails()) {
                 continue;
             }
-            Department::create([
-                'name' => $row['name'],
-                'parent_id' => $row['parent_id'],
-            ]);
+            if (!empty($row['phong_ban_cap_tren'])) {
+                $department = Department::where('name','=',$row['phong_ban_cap_tren'])->first();
+                Department::create([
+                    'name' => $row['ten_phong_ban'],
+                    'parent_id' => $department->id,
+                ]);
+            } else {
+                Department::create([
+                    'name' => $row['ten_phong_ban'],
+                ]);
+            }
         }
     }
 }

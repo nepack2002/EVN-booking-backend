@@ -79,8 +79,9 @@ class NotificationGenerate extends Command
             if ($diffInDays >= 180) {
                 $message = "Đã $diffInDays ngày từ ngày bảo dưỡng gần nhất của xe {$car->ten_xe} - {$car->bien_so_xe}. Bạn lưu ý đưa xe bảo dưỡng đúng ngày";
                 $notification = new Notification();
-                $notification->user_id = $user_ids[$car->id];
+                $notification->user_id = $car->user_id;
                 $notification->message = $message;
+                $this->sendNotificationByUserId($car->user_id, $message);
                 $notification->save();
 
                 //Gui thong bao cho admin
@@ -98,8 +99,9 @@ class NotificationGenerate extends Command
             if ($diffInDays >= 180) {
                 $message = "Đã $diffInDays ngày từ sửa chữa lớn gần nhất của xe {$car->ten_xe} - {$car->bien_so_xe}. Bạn lưu ý đưa xe bảo dưỡng đúng ngày";
                 $notification = new Notification();
-                $notification->user_id = $user_ids[$car->id];
+                $notification->user_id = $car->user_id;
                 $notification->message = $message;
+                $this->sendNotificationByUserId($car->user_id, $message);
                 $notification->save();
 
                 //Gui thong bao cho admin
@@ -131,6 +133,7 @@ class NotificationGenerate extends Command
                     $notification = new Notification();
                     $notification->user_id = $user_id;
                     $notification->message = $message;
+                    $this->sendNotificationByUserId($user_id, $message);
                     $notification->save();
                 } else {
                     $this->info("Thời gian lịch hẹn: " . $scheduleTime);
