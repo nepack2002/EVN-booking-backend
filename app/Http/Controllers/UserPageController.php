@@ -133,11 +133,12 @@ class UserPageController extends Controller
         $schedule->save();
     }
 
-    public function getSchedulesGroupedByDate()
+    public function getSchedulesGroupedByDate($userId)
     {
         $now = Carbon::now();
-
-        $schedules = Schedule::where('datetime', '>=', $now)
+        $cars = Car::where('user_id', $userId)->pluck('id');
+        $schedules = Schedule::with('car')->where('datetime', '>=', $now)
+            ->whereIn('car_id', $cars)
             ->orderBy('datetime')
             ->get()
             ->groupBy(function ($date) {
