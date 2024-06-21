@@ -14,12 +14,6 @@ class CarsController extends Controller
 {
     public function create(Request $request)
     {
-        if ($request->user_id) {
-            $user = User::with('car')->find($request->user_id);
-            if ($user->car) {
-                return response()->json(['messages' => 'Người dùng này đã sở hữu một xe. Không thể thêm xe mới.'], 409);
-            }
-        }
         $request->validate([
             'ten_xe' => 'required|min:2',
             'mau_xe' => 'required',
@@ -122,10 +116,6 @@ class CarsController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $existingCar = Car::where('user_id', $request->user_id)->where('id', '!=', $id)->first();
-        if ($existingCar) {
-            return response()->json(['messages' => 'Người dùng này đã sở hữu một xe khác. Không thể cập nhật xe mới với user_id này.'], 409);
-        }
         $request->validate([
             'ten_xe' => 'required|min:2',
             'mau_xe' => 'required',
