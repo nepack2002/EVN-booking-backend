@@ -9,6 +9,7 @@ use App\Models\ScheduleLocation;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class UserPageController extends Controller
@@ -66,7 +67,7 @@ class UserPageController extends Controller
 
     public function updateRun(Request $request, $id)
     {
-        $userId = $request->user()->id;
+        $userId = Auth::id();
         if ($request->input('status') == '1') {
             $cars = Car::where('user_id', $userId)->pluck('id');
             $checkIsThereAnyRunningSchedule = Schedule::whereIn('car_id', $cars)->where('status', '1')->orWhere('status', '3')->get();
