@@ -68,14 +68,16 @@ class UserPageController extends Controller
     public function updateRun(Request $request, $id)
     {
         $userId = Auth::id();
+        $schedule = Schedule::findOrFail($id);
+
         if ($request->input('status') == '1') {
-            $cars = Car::where('user_id', $userId)->pluck('id');
+            $cars = Car::where('user_id', $userId)->where('id', '!=', $schedule->car_id)->pluck('id');
             $checkIsThereAnyRunningSchedule = Schedule::whereIn('car_id', $cars)->where('status', '1')->orWhere('status', '3')->get();
             if (!$checkIsThereAnyRunningSchedule->isEmpty()) {
                 return response()->json(['message' => 'Đang trong một chuyến đi khác']);
             }
         }
-        $schedule = Schedule::findOrFail($id);
+
         $schedule->status = $request->input('status');
         $schedule->save();
 
