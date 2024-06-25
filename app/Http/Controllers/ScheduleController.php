@@ -56,7 +56,7 @@ class ScheduleController extends Controller
         $validatedData['datetime'] = Carbon::createFromFormat('d/m/Y H:i', $validatedData['datetime'])->format('Y-m-d H:i:s');
 
         $file_name = $request->file('tai_lieu')->getClientOriginalName();
-        $request->file('anh_xe')->move(public_path('documents'), $file_name);
+        $request->file('tai_lieu')->move(public_path('documents'), $file_name);
         $file_path = 'documents/' . $file_name;
         $validatedData['tai_lieu'] = $file_path;
         $validatedData['ten_tai_lieu'] = $file_name;
@@ -103,7 +103,7 @@ class ScheduleController extends Controller
         $validatedData['datetime'] = Carbon::createFromFormat('d/m/Y H:i', $validatedData['datetime'])->format('Y-m-d H:i:s');
 
         $file_name = $request->file('tai_lieu')->getClientOriginalName();
-        $request->file('anh_xe')->move(public_path('documents'), $file_name);
+        $request->file('tai_lieu')->move(public_path('documents'), $file_name);
         $file_path = 'documents/' . $file_name;
         $validatedData['tai_lieu'] = $file_path;
         $validatedData['ten_tai_lieu'] = $file_name;
