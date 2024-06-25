@@ -21,6 +21,8 @@ class Schedule extends Model
         'car_id',
         'participants',
         'program',
+        'tai_lieu',
+        'ten_tai_lieu',
     ];
 
     public function department()
