@@ -194,9 +194,12 @@ class CarsController extends Controller
         }
         $car = Car::findOrFail($id);
 
-        $carHistory = new CarHistory();
+        $carHistory = CarHistory::where('car_id', $id)->where('trang_thai', '1')->first();
+        if (empty($carHistory)) {
+            $carHistory = new CarHistory();
+        }
         $carHistory->car_id = $car->id;
-        $carHistory->submit_by = Auth::user()->id;
+        $carHistory->submit_by = Auth::id();
         if (!empty($request->ngay_bao_duong_gan_nhat)) {
             $carHistory->ngay_bao_duong_gan_nhat = Carbon::createFromFormat('d/m/Y', $request->ngay_bao_duong_gan_nhat)->format('Y-m-d');
         }
