@@ -128,7 +128,7 @@ class CarsController extends Controller
             'ngay_bao_duong_gan_nhat' => 'required|date_format:d/m/Y',
             'han_dang_kiem_tiep_theo' => 'required|date_format:d/m/Y',
             'ngay_sua_chua_lon_gan_nhat' => 'required|date_format:d/m/Y',
-            'anh_xe' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'anh_xe' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'location' => 'required',
             'lat_location' => 'required',
             'long_location' => 'required',
