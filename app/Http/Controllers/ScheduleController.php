@@ -19,9 +19,9 @@ class ScheduleController extends Controller
         $query = $request->query('query');
         if (!empty($query)) {
             $schedules = Schedule::where('program', 'like', '%' . $query . '%')
-                ->paginate(5);
+                ->paginate(20);
         } else {
-            $schedules = Schedule::paginate(5);
+            $schedules = Schedule::paginate(20);
         }
         foreach ($schedules as $schedule) {
             $schedule->datetime = Carbon::parse($schedule->datetime)->format('d/m/Y H:i');

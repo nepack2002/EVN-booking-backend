@@ -18,7 +18,7 @@ class DepartmentController extends Controller
         if (!empty($query)) {
             $departments = Department::with('children')->where('name', 'like', '%' . $query . '%')->paginate(5);
         } else {
-            $departments = Department::with('children')->paginate(5);
+            $departments = Department::with('children')->paginate(20);
         }
         return response()->json($departments);
     }

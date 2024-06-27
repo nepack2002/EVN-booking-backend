@@ -17,7 +17,7 @@ class UsersController extends Controller
         $query = $request->query('query');
         $users = User::with(['car', 'department'])
             ->where('name', 'like', '%' . $query . '%')
-            ->paginate(5);
+            ->paginate(20);
 
         return response()->json($users);
     }

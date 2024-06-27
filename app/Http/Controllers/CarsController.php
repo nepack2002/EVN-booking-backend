@@ -70,27 +70,31 @@ class CarsController extends Controller
             $domain = config('app.url');
             $carsCollection = collect($carsCollection)->map(function ($car) use ($domain) {
                 // Thay đổi đường dẫn ảnh và tên người dùng
-                $imagePath = $car->anh_xe;
-                $imageUrl = asset($imagePath);
-                $imageUrl = $domain . $imageUrl;
-                $car->anh_xe = $imageUrl;
+                if ($car->anh_xe) {
+                    $imagePath = $car->anh_xe;
+                    $imageUrl = asset($imagePath);
+                    $imageUrl = $domain . $imageUrl;
+                    $car->anh_xe = $imageUrl;
+                }
                 // Thay đổi trường user_id thành tên người dùng
-                $car->user_id = $car->user->name;
+                $car->user_id = $car->user?$car->user->name:null;
                 return $car;
             });
         } else {
-            $cars = Car::with('user')->paginate(5);
+            $cars = Car::with('user')->paginate(20);
 
             $carsCollection = $cars->items();
             $domain = config('app.url');
             $carsCollection = collect($carsCollection)->map(function ($car) use ($domain) {
                 // Thay đổi đường dẫn ảnh và tên người dùng
-                $imagePath = $car->anh_xe;
-                $imageUrl = asset($imagePath);
-                $imageUrl = $domain . $imageUrl;
-                $car->anh_xe = $imageUrl;
+                if ($car->anh_xe) {
+                    $imagePath = $car->anh_xe;
+                    $imageUrl = asset($imagePath);
+                    $imageUrl = $domain . $imageUrl;
+                    $car->anh_xe = $imageUrl;
+                }
                 // Thay đổi trường user_id thành tên người dùng
-                $car->user_id = $car->user->name;
+                $car->user_id = $car->user?$car->user->name:null;
                 return $car;
             });
         }
