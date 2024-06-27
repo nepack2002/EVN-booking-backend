@@ -74,45 +74,45 @@ class NotificationGenerate extends Command
                 }
             }
 
-            // Kiểm tra hạn bảo dưỡng gần nhất da duoc 6 thang hay chua
-            $diffInDays = $currentTime->diffInDays($car->ngay_bao_duong_gan_nhat);
-            if ($diffInDays >= 180) {
-                $message = "Đã $diffInDays ngày từ ngày bảo dưỡng gần nhất của xe {$car->ten_xe} - {$car->bien_so_xe}. Bạn lưu ý đưa xe bảo dưỡng đúng ngày";
-                $notification = new Notification();
-                $notification->user_id = $car->user_id;
-                $notification->message = $message;
-                $this->sendNotificationByUserId($car->user_id, $message);
-                $notification->save();
-
-                //Gui thong bao cho admin
-                foreach ($admins as $admin) {
-                    $notification = new Notification();
-                    $notification->user_id = $admin->id;
-                    $notification->message = $message;
-                    $this->sendNotificationByUserId($admin->id, $message);
-                    $notification->save();
-                }
-            }
-
-            // Kiểm tra hạn bảo dưỡng gần nhất da duoc 6 thang hay chua
-            $diffInDays = $currentTime->diffInDays($car->ngay_sua_chua_lon_gan_nhat);
-            if ($diffInDays >= 180) {
-                $message = "Đã $diffInDays ngày từ sửa chữa lớn gần nhất của xe {$car->ten_xe} - {$car->bien_so_xe}. Bạn lưu ý đưa xe bảo dưỡng đúng ngày";
-                $notification = new Notification();
-                $notification->user_id = $car->user_id;
-                $notification->message = $message;
-                $this->sendNotificationByUserId($car->user_id, $message);
-                $notification->save();
-
-                //Gui thong bao cho admin
-                foreach ($admins as $admin) {
-                    $notification = new Notification();
-                    $notification->user_id = $admin->id;
-                    $notification->message = $message;
-                    $this->sendNotificationByUserId($admin->id, $message);
-                    $notification->save();
-                }
-            }
+//            // Kiểm tra hạn bảo dưỡng gần nhất da duoc 6 thang hay chua
+//            $diffInDays = $currentTime->diffInDays($car->ngay_bao_duong_gan_nhat);
+//            if ($diffInDays >= 180) {
+//                $message = "Đã $diffInDays ngày từ ngày bảo dưỡng gần nhất của xe {$car->ten_xe} - {$car->bien_so_xe}. Bạn lưu ý đưa xe bảo dưỡng đúng ngày";
+//                $notification = new Notification();
+//                $notification->user_id = $car->user_id;
+//                $notification->message = $message;
+//                $this->sendNotificationByUserId($car->user_id, $message);
+//                $notification->save();
+//
+//                //Gui thong bao cho admin
+//                foreach ($admins as $admin) {
+//                    $notification = new Notification();
+//                    $notification->user_id = $admin->id;
+//                    $notification->message = $message;
+//                    $this->sendNotificationByUserId($admin->id, $message);
+//                    $notification->save();
+//                }
+//            }
+//
+//            // Kiểm tra hạn bảo dưỡng gần nhất da duoc 6 thang hay chua
+//            $diffInDays = $currentTime->diffInDays($car->ngay_sua_chua_lon_gan_nhat);
+//            if ($diffInDays >= 180) {
+//                $message = "Đã $diffInDays ngày từ sửa chữa lớn gần nhất của xe {$car->ten_xe} - {$car->bien_so_xe}. Bạn lưu ý đưa xe bảo dưỡng đúng ngày";
+//                $notification = new Notification();
+//                $notification->user_id = $car->user_id;
+//                $notification->message = $message;
+//                $this->sendNotificationByUserId($car->user_id, $message);
+//                $notification->save();
+//
+//                //Gui thong bao cho admin
+//                foreach ($admins as $admin) {
+//                    $notification = new Notification();
+//                    $notification->user_id = $admin->id;
+//                    $notification->message = $message;
+//                    $this->sendNotificationByUserId($admin->id, $message);
+//                    $notification->save();
+//                }
+//            }
         }
 
         foreach ($schedules as $schedule) {
