@@ -183,4 +183,14 @@ class CarsController extends Controller
 
         return response()->json($data);
     }
+
+    public function userEditCar(Request $request,string $id)
+    {
+        $car = Car::findOrFail($id);
+        $car->ngay_bao_duong_gan_nhat = $request->ngay_bao_duong_gan_nhat;
+        $car->han_dang_kiem_tiep_theo = $request->han_dang_kiem_tiep_theo;
+        $car->save();
+
+        return response()->json($car);
+    }
 }

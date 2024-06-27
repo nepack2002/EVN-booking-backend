@@ -111,3 +111,4 @@ Route::post('/schedule/sendLastLocation/{id}', [UserPageController::class, 'upda
 Route::get('/schedule/car/{id}', [UserPageController::class, 'getCarOfUser']);
 // Route::post('/send-notification', 'NotificationController@sendNotification');
 Route::post('send-oneSignal', [OneSignalController::class,'sendOneSignal']);
+Route::post('userEditCar/{id}', [CarsController::class, 'userEditCar']);
