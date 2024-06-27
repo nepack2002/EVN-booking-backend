@@ -31,8 +31,8 @@ class AuthController extends Controller
             ], 404);
         }
         // Tạo token
-        $accessToken = $user->createToken('access_token', [TokenAbility::ACCESS_API->value]);
-        $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value]);
+        $accessToken = $user->createToken('access_token');
+        $refreshToken = $user->createToken('refresh_token');
 
         return response()->json([
             'access_token' => $accessToken->plainTextToken,
@@ -84,7 +84,7 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
 
-        $accessToken = $request->user()->createToken('access_token', [TokenAbility::ACCESS_API->value]);
+        $accessToken = $request->user()->createToken('access_token');
 
         return ['access_token' => $accessToken->plainTextToken];
     }

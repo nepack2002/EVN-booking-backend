@@ -31,6 +31,8 @@ class ScheduleController extends Controller
 
     public function show(Schedule $schedule)
     {
+        $schedule->tai_lieu_preview = $schedule->tai_lieu;
+        unset($schedule->tai_lieu);
         $schedule->datetime = Carbon::parse($schedule->datetime)->format('d/m/Y H:i');
         return response()->json($schedule);
     }
@@ -98,7 +100,7 @@ class ScheduleController extends Controller
             'car_id' => 'required|exists:cars,id',
             'participants' => 'required|string',
             'program' => 'required|string',
-            'tai_lieu' => 'required|file|mimes:pdf',
+            'tai_lieu' => 'file|mimes:pdf',
         ]);
         $validatedData['datetime'] = Carbon::createFromFormat('d/m/Y H:i', $validatedData['datetime'])->format('Y-m-d H:i:s');
 

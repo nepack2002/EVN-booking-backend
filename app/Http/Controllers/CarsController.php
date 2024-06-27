@@ -105,7 +105,9 @@ class CarsController extends Controller
         $imagePath = $car->anh_xe;
         $imageUrl = asset($imagePath);
         $imageUrl = $domain . $imageUrl;
-        $car->anh_xe = $imageUrl;
+        $car->anh_xe_preview = $imageUrl;
+        unset($car->anh_xe);
+
 
         $car->ngay_bao_duong_gan_nhat = $car->ngay_bao_duong_gan_nhat ? \Illuminate\Support\Carbon::parse($car->ngay_bao_duong_gan_nhat)->format('d/m/Y') : null;
         $car->han_dang_kiem_tiep_theo = $car->han_dang_kiem_tiep_theo ? \Illuminate\Support\Carbon::parse($car->han_dang_kiem_tiep_theo)->format('d/m/Y') : null;
