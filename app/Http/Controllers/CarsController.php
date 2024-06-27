@@ -189,8 +189,8 @@ class CarsController extends Controller
     public function userEditCar(Request $request,string $id)
     {
         $car = Car::findOrFail($id);
-        $car->ngay_bao_duong_gan_nhat = $request->ngay_bao_duong_gan_nhat;
-        $car->han_dang_kiem_tiep_theo = $request->han_dang_kiem_tiep_theo;
+        $car->ngay_bao_duong_gan_nhat = Carbon::createFromFormat('d/m/Y', $request->ngay_bao_duong_gan_nhat)->format('Y-m-d');
+        $car->han_dang_kiem_tiep_theo = Carbon::createFromFormat('d/m/Y', $request->han_dang_kiem_tiep_theo)->format('Y-m-d');
         $car->save();
 
         return response()->json($car);
