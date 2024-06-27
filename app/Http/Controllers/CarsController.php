@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Imports\CarsImport;
 use App\Models\Car;
+use App\Models\CarHistory;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -192,11 +194,33 @@ class CarsController extends Controller
 
     public function userEditCar(Request $request,string $id)
     {
+        $validator = Validator::make($request->all(), [
+            'hoa_don' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'ngay_bao_duong_gan_nhat' => 'date_format:d/m/Y',
+            'han_dang_kiem_tiep_theo' => 'date_format:d/m/Y',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
         $car = Car::findOrFail($id);
-        $car->ngay_bao_duong_gan_nhat = Carbon::createFromFormat('d/m/Y', $request->ngay_bao_duong_gan_nhat)->format('Y-m-d');
-        $car->han_dang_kiem_tiep_theo = Carbon::createFromFormat('d/m/Y', $request->han_dang_kiem_tiep_theo)->format('Y-m-d');
-        $car->save();
 
-        return response()->json($car);
+        $carHistory = new CarHistory();
+        $carHistory->car_id = $car->id;
+        $carHistory->submit_by = Auth::user()->id;
+        if (!empty($request->ngay_bao_duong_gan_nhat)) {
+            $carHistory->ngay_bao_duong_gan_nhat = Carbon::createFromFormat('d/m/Y', $request->ngay_bao_duong_gan_nhat)->format('Y-m-d');
+        }
+        if (!empty($request->han_dang_kiem_tiep_theo)) {
+            $carHistory->han_dang_kiem_tiep_theo = Carbon::createFromFormat('d/m/Y', $request->han_dang_kiem_tiep_theo)->format('Y-m-d');
+        }
+        if ($request->hasFile('hoa_don') && $request->file('hoa_don')->isValid()) {
+            $file_name = $request->file('hoa_don')->getClientOriginalName();
+            $request->file('hoa_don')->move(public_path('hoadon'), $file_name);
+            $file_path = 'hoadon/' . $file_name;
+            $carHistory->tai_lieu = $file_path;
+        }
+        $carHistory->save();
+
+        return response()->json(['message' => 'Gửi yêu cầu chỉnh sửa thành công']);
     }
 }

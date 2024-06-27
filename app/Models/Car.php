@@ -20,4 +20,9 @@ class Car extends Model
     {
         return $this->hasMany(Schedule::class, 'car_id');
     }
+
+    public function history()
+    {
+        return $this->hasMany(CarHistory::class, 'car_id');
+    }
 }
