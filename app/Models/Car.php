@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,6 +24,11 @@ class Car extends Model
 
     public function history()
     {
-        return $this->hasMany(CarHistory::class, 'car_id');
+        return $this->hasMany(CarHistory::class, 'car_id')->orderBy('created_at', 'desc');
+    }
+
+    public function needVerify()
+    {
+        return $this->hasMany(CarHistory::class, 'car_id')->orderBy('created_at', 'desc')->where('trang_thai', '1');
     }
 }

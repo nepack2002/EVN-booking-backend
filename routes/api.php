@@ -34,6 +34,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('/cars/{id}', 'update');
             Route::delete('/cars/{id}', 'destroy');
             Route::post('car/import', 'import');
+            Route::post('/car/allowChange', 'allowChange');
         });
 
 
@@ -71,6 +72,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('/cars/{id}', 'update');
             Route::delete('/cars/{id}', 'destroy');
             Route::post('car/import', 'import');
+            Route::post('/car/allowChange', 'allowChange');
         });
     });
     Route::middleware('qtct')->group(function () {

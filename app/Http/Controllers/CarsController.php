@@ -66,47 +66,30 @@ class CarsController extends Controller
     public function getCar(Request $request)
     {
         $query = $request->query('query');
-        if (!empty($query)) {
-            $cars = Car::with('user')->where('ten_xe', 'LIKE', '%' . $query . '%')->paginate(5);
-            $carsCollection = $cars->items();
-            $domain = config('app.url');
-            $carsCollection = collect($carsCollection)->map(function ($car) use ($domain) {
-                // Thay đổi đường dẫn ảnh và tên người dùng
-                if ($car->anh_xe) {
-                    $imagePath = $car->anh_xe;
-                    $imageUrl = asset($imagePath);
-                    $imageUrl = $domain . $imageUrl;
-                    $car->anh_xe = $imageUrl;
-                }
-                // Thay đổi trường user_id thành tên người dùng
-                $car->user_id = $car->user?$car->user->name:null;
-                return $car;
-            });
-        } else {
-            $cars = Car::with('user')->paginate(20);
 
-            $carsCollection = $cars->items();
-            $domain = config('app.url');
-            $carsCollection = collect($carsCollection)->map(function ($car) use ($domain) {
-                // Thay đổi đường dẫn ảnh và tên người dùng
-                if ($car->anh_xe) {
-                    $imagePath = $car->anh_xe;
-                    $imageUrl = asset($imagePath);
-                    $imageUrl = $domain . $imageUrl;
-                    $car->anh_xe = $imageUrl;
-                }
-                // Thay đổi trường user_id thành tên người dùng
-                $car->user_id = $car->user?$car->user->name:null;
-                return $car;
-            });
-        }
+        $cars = Car::with('user','needVerify')->where('ten_xe', 'LIKE', '%' . $query . '%')->paginate(20);
+        $carsCollection = $cars->items();
+        $domain = config('app.url');
+        collect($carsCollection)->map(function ($car) use ($domain) {
+            // Thay đổi đường dẫn ảnh và tên người dùng
+            if ($car->anh_xe) {
+                $imagePath = $car->anh_xe;
+                $imageUrl = asset($imagePath);
+                $imageUrl = $domain . $imageUrl;
+                $car->anh_xe = $imageUrl;
+            }
+            // Thay đổi trường user_id thành tên người dùng
+            $car->user_id = $car->user?$car->user->name:null;
+            return $car;
+        });
+
         // Trả về phản hồi JSON với thông tin phân trang
         return response()->json($cars);
     }
 
     public function get(string $id)
     {
-        $car = Car::find($id);
+        $car = Car::with('history.user')->where('id', $id)->first();
         $domain = config('app.url');
         $imagePath = $car->anh_xe;
         $imageUrl = asset($imagePath);
@@ -118,6 +101,13 @@ class CarsController extends Controller
         $car->ngay_bao_duong_gan_nhat = $car->ngay_bao_duong_gan_nhat ? \Illuminate\Support\Carbon::parse($car->ngay_bao_duong_gan_nhat)->format('d/m/Y') : null;
         $car->han_dang_kiem_tiep_theo = $car->han_dang_kiem_tiep_theo ? \Illuminate\Support\Carbon::parse($car->han_dang_kiem_tiep_theo)->format('d/m/Y') : null;
         $car->ngay_sua_chua_lon_gan_nhat = $car->ngay_sua_chua_lon_gan_nhat ? \Illuminate\Support\Carbon::parse($car->ngay_sua_chua_lon_gan_nhat)->format('d/m/Y') : null;
+
+
+        foreach ($car->history as $item) {
+            $item->ngay_bao_duong_gan_nhat = $item->ngay_bao_duong_gan_nhat ? Carbon::createFromFormat('Y-m-d', $item->ngay_bao_duong_gan_nhat)->format('d/m/Y') : null;
+            $item->han_dang_kiem_tiep_theo = $item->han_dang_kiem_tiep_theo ? Carbon::createFromFormat('Y-m-d', $item->han_dang_kiem_tiep_theo)->format('d/m/Y') : null;
+            $item->tai_lieu = $domain . asset($item->tai_lieu);
+        }
 
         return response()->json($car);
     }
@@ -222,5 +212,28 @@ class CarsController extends Controller
         $carHistory->save();
 
         return response()->json(['message' => 'Gửi yêu cầu chỉnh sửa thành công']);
+    }
+
+    public function allowChange(Request $request)
+    {
+        $historyId = $request->get('historyId');
+        $history = CarHistory::findOrFail($historyId);
+
+        $car = Car::findOrFail($history->car_id);
+        if (!empty($history->ngay_bao_duong_gan_nhat)) {
+            $car->ngay_bao_duong_gan_nhat = $history->ngay_bao_duong_gan_nhat;
+        }
+
+        if (!empty($history->han_dang_kiem_tiep_theo)) {
+            $car->han_dang_kiem_tiep_theo = $history->han_dang_kiem_tiep_theo;
+        }
+
+        $history->trang_thai = '0';
+        $history->save();
+        $car->save();
+
+        return response()->json([
+            'message' => 'Phê duyệt thành công',
+        ]);
     }
 }

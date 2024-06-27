@@ -22,9 +22,17 @@ class UserPageController extends Controller
 
     public function getCarOfUser(string $id)
     {
-        $car = Car::where('user_id', $id)->get();
-        if ($car) {
-            return response()->json($car);
+        $cars = Car::with('history')->where('user_id', $id)->get();
+        $domain = config('app.url');
+        foreach ($cars as $car) {
+            foreach ($car->history as $item) {
+                $item->ngay_bao_duong_gan_nhat = $item->ngay_bao_duong_gan_nhat ? Carbon::createFromFormat('Y-m-d', $item->ngay_bao_duong_gan_nhat)->format('d/m/Y') : null;
+                $item->han_dang_kiem_tiep_theo = $item->han_dang_kiem_tiep_theo ? Carbon::createFromFormat('Y-m-d', $item->han_dang_kiem_tiep_theo)->format('d/m/Y') : null;
+                $item->tai_lieu = $domain . asset($item->tai_lieu);
+            }
+        }
+        if ($cars) {
+            return response()->json($cars);
         } else {
             return response()->json(['message' => 'Không tìm thấy xe cho người dùng này'], 404);
         }
