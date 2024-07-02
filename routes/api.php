@@ -87,6 +87,26 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('/coordinates', [ScheduleController::class, 'storeCoordinates']);
         });
     });
+
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/forgotPassword', [ForgotPasswordController::class, 'forgotPassword']);
+
+    Route::get('users/{userId}/schedules', [UserPageController::class, 'getUserSchedules']);
+    Route::get('users/{userId}/schedulesDate', [UserPageController::class, 'getSchedulesGroupedByDate']);
+    Route::get('users/{userId}/currentRunningSchedule', [UserPageController::class, 'getCurrentRunningSchedule']);
+    Route::get('users/ScheduleLocation/{id}',[UserPageController::class, 'getLocation']);
+    Route::get('users/schedule/{schedule}', [UserPageController::class, 'getDetail']);
+    Route::get('users/notification/{id}', [UserPageController::class, 'getNotification']);
+    Route::get('users/notificationUnRead/{id}', [UserPageController::class, 'getNotificationUnRead']);
+    Route::put('/notifications/{notification}/mark-as-read', [UserPageController::class, 'markAsRead']);
+    Route::post('/cars/update/{id}', [UserPageController::class, 'updateRun']);
+    Route::post('/schedule/location/{id}', [UserPageController::class, 'sendLocation']);
+    Route::post('/schedule/time/{id}', [UserPageController::class, 'sendTime']);
+    Route::post('/schedule/sendLastLocation/{id}', [UserPageController::class, 'updateLastLocation']);
+    Route::get('/schedule/car/{id}', [UserPageController::class, 'getCarOfUser']);
+// Route::post('/send-notification', 'NotificationController@sendNotification');
+    Route::post('send-oneSignal', [OneSignalController::class,'sendOneSignal']);
+    Route::post('userEditCar/{id}', [CarsController::class, 'userEditCar']);
 });
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -94,23 +114,3 @@ Route::post('/refresh-token', [AuthController::class, 'refresh'])->middleware([
     'auth:sanctum',
     'ability:'.TokenAbility::ISSUE_ACCESS_TOKEN->value,
 ]);
-
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/forgotPassword', [ForgotPasswordController::class, 'forgotPassword']);
-
-Route::get('users/{userId}/schedules', [UserPageController::class, 'getUserSchedules']);
-Route::get('users/{userId}/schedulesDate', [UserPageController::class, 'getSchedulesGroupedByDate']);
-Route::get('users/{userId}/currentRunningSchedule', [UserPageController::class, 'getCurrentRunningSchedule']);
-Route::get('users/ScheduleLocation/{id}',[UserPageController::class, 'getLocation']);
-Route::get('users/schedule/{schedule}', [UserPageController::class, 'getDetail']);
-Route::get('users/notification/{id}', [UserPageController::class, 'getNotification']);
-Route::get('users/notificationUnRead/{id}', [UserPageController::class, 'getNotificationUnRead']);
-Route::put('/notifications/{notification}/mark-as-read', [UserPageController::class, 'markAsRead']);
-Route::post('/cars/update/{id}', [UserPageController::class, 'updateRun']);
-Route::post('/schedule/location/{id}', [UserPageController::class, 'sendLocation']);
-Route::post('/schedule/time/{id}', [UserPageController::class, 'sendTime']);
-Route::post('/schedule/sendLastLocation/{id}', [UserPageController::class, 'updateLastLocation']);
-Route::get('/schedule/car/{id}', [UserPageController::class, 'getCarOfUser']);
-// Route::post('/send-notification', 'NotificationController@sendNotification');
-Route::post('send-oneSignal', [OneSignalController::class,'sendOneSignal']);
-Route::post('userEditCar/{id}', [CarsController::class, 'userEditCar']);

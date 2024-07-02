@@ -185,7 +185,7 @@ class CarsController extends Controller
     public function userEditCar(Request $request,string $id)
     {
         $validator = Validator::make($request->all(), [
-            'hoa_don' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'hoa_don' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
             'ngay_bao_duong_gan_nhat' => 'date_format:d/m/Y',
             'han_dang_kiem_tiep_theo' => 'date_format:d/m/Y',
         ]);
