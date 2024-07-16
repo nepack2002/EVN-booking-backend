@@ -15,18 +15,16 @@ class UsersController extends Controller
     public function getUser(Request $request)
     {
         $query = $request->query('query');
-
-        if (!empty($query)) {
-            $users = User::with(['car', 'department'])
-                ->where('name', 'like', '%' . $query . '%')
-                ->paginate(5);
-        } else {
-            $users = User::with(['car', 'department'])->paginate(5);
-        }
-
+        $users = User::with(['car', 'department'])
+            ->where('name', 'like', '%' . $query . '%')
+            ->paginate(20);
         return response()->json($users);
     }
-
+    public function getDriver()
+    {
+        $users = User::with(['car', 'department'])->where('role', 'user')->get();
+        return response()->json($users);
+    }
     public function create(Request $request)
     {
         $rules = [

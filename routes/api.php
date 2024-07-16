@@ -60,6 +60,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::middleware('qtvt')->group(function () {
         Route::get('/users', [UsersController::class, 'getUser']);
+        Route::get('/drivers', [UsersController::class, 'getDriver']);
         //CarsController
         Route::controller(CarsController::class)->group(function () {
             Route::get('/cars', 'getCar');
