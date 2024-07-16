@@ -98,7 +98,6 @@ Route::get('users/notificationUnRead/{id}', [UserPageController::class, 'getNoti
 Route::put('/notifications/{notification}/mark-as-read', [UserPageController::class, 'markAsRead']);
 Route::post('/cars/update/{id}', [UserPageController::class, 'updateRun']);
 Route::post('/schedule/location/{id}', [UserPageController::class, 'sendLocation']);
-Route::post('/schedule/sendLastLocation/{id}', [UserPageController::class, 'updateLastLocation']);
 Route::get('/schedule/car/{id}', [UserPageController::class, 'getCarOfUser']);
 // Route::post('/send-notification', 'NotificationController@sendNotification');
 Route::post('send-oneSignal', [OneSignalController::class,'sendOneSignal']);

@@ -64,24 +64,37 @@ class UserPageController extends Controller
         $schedule->save();
 
         return response()->json(['message' => 'Car run value updated successfully']);
-
     }
 
     public function sendLocation(Request $request, $id)
     {
+        $lat = $request->input('lat_location');
+        $long = $request->input('long_location');
+        $location = $request->input('location');
+
         $carId = Schedule::findOrFail($id)->pluck('car_id')->first();
         $car = Car::findOrFail($carId);
-        $scheduleLocation = new ScheduleLocation();
-        $car->lat_location = $request->input('lat_location');
-        $car->long_location = $request->input('long_location');
-        $scheduleLocation->schedule_id = $id;
-        $scheduleLocation->lat = $request->input('lat_location');
-        $scheduleLocation->long = $request->input('long_location');
-        $scheduleLocation->location = $request->input('location');
+
+        $car->lat_location = $lat;
+        $car->long_location = $long;
+        $car->location = $location;
         $car->save();
+
+        $scheduleLocation = new ScheduleLocation();
+        $scheduleLocation->schedule_id = $id;
+        $scheduleLocation->lat = $lat;
+        $scheduleLocation->long = $long;
+        $scheduleLocation->location = $location;
+
+
         $scheduleLocation->save();
+
+      
+
+        return response()->json(['message' => 'Car location updated successfully']);
     }
-    public function x(Request $request, $id){
+    public function x(Request $request, $id)
+    {
         $schedule = Schedule::findOrFail($id);
         $schedule->location_2 = $request->input('location_2');
         $schedule->lat_location_2 = $request->input('lat_location_2');
@@ -101,8 +114,9 @@ class UserPageController extends Controller
 
         return response()->json($schedules);
     }
-    public function getLocation(String $id){
-        $locations = ScheduleLocation::where('schedule_id',$id)->get();
+    public function getLocation(String $id)
+    {
+        $locations = ScheduleLocation::where('schedule_id', $id)->get();
         return response()->json($locations);
     }
 }

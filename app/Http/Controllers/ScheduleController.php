@@ -6,6 +6,8 @@ use App\Models\Car;
 use Illuminate\Http\Request;
 use App\Models\Schedule;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Notification;
+use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\SchedulesImport;
 
@@ -42,12 +44,20 @@ class ScheduleController extends Controller
             'participants' => 'required|string',
             'program' => 'required|string',
         ]);
-
+        $dateTimeBackup = $validatedData['datetime'];
         // Tạo mới một schedule từ dữ liệu được validate
+
         $schedule = Schedule::create($validatedData);
 
-        // Trả về response thành công nếu tạo schedule thành công
-        return response()->json(['message' => 'Schedule created successfully', 'schedule' => $schedule], 201);
+        $car = Car::findOrFail($validatedData['car_id']);
+        if (!empty($car->user_id)) {
+            $message = "Bạn vừa được phân công lịch {$validatedData['program']}. Lịch trình bắt đầu lúc {$dateTimeBackup}. Địa điểm di chuyển từ {$validatedData['location']} tới {$validatedData['location_2']}";
+            $notification = new Notification();
+            $notification->user_id = $car->user_id;
+            $notification->message = $message;
+            $notification->save();
+        }
+        return response()->json(['message' => 'Tạo lịch trình thành công', 'schedule' => $schedule], 201);
     }
 
     public function update(Request $request, $id)
@@ -135,12 +145,15 @@ class ScheduleController extends Controller
         // Lấy dữ liệu `lat` và `long` từ request
         $lat = $request->lat ?? null;
         $long = $request->long ?? null;
+        $soCho = $request->so_cho ?? 0;
 
         // Tính toán khoảng cách với từng car
-        $cars = Car::all();
+        $cars = Car::where('so_cho', '>=', $soCho)->orderBy('so_cho', 'ASC')->get();
         $distances = [];
+        $carsFormat = [];
 
         foreach ($cars as $car) {
+            $carsFormat[$car->id] = $car;
             $carLat = $car->lat_location;
             $carLong = $car->long_location;
 
@@ -153,21 +166,33 @@ class ScheduleController extends Controller
             }
 
             // Lưu khoảng cách vào mảng
-            $distances[$car->id] = $distance;
+            $distances[$car->id] = [
+                "distance" => $distance,
+                "so_cho" => $car->so_cho,
+            ];
         }
 
-        asort($distances);
+        uasort($distances, function ($a, $b) {
+            // First, compare so_cho
+            if ($a['so_cho'] == $b['so_cho']) {
+                // If so_cho is the same, compare distance
+                return $a['distance'] <=> $b['distance'];
+            }
+            // Otherwise, compare so_cho
+            return $a['so_cho'] <=> $b['so_cho'];
+        });
 
         $carsWithDistance = [];
         foreach ($distances as $carId => $distance) {
             // Lấy tên của xe
-            $carName = Car::find($carId)->ten_xe;
+            $carName = $carsFormat[$carId]->ten_xe;
 
             // Tạo mảng chứa thông tin về xe và khoảng cách
             $carWithDistance = [
                 'car_id' => $carId,
                 'name' => $carName,
-                'distance' => $distance
+                'distance' => $distance["distance"],
+                'so_cho' => $distance["so_cho"],
             ];
             $carsWithDistance[] = $carWithDistance;
         }
