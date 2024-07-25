@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Imports\CarsImport;
 use App\Models\Car;
-use App\Models\CarHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -21,17 +19,14 @@ class CarsController extends Controller
             'user_id' => 'required',
             'bien_so_xe' => 'required|unique:cars,bien_so_xe',
             'so_khung' => 'required|unique:cars,so_khung',
-            'so_may' => 'required|unique:cars,so_may',
             'so_cho' => 'required',
             'so_dau_xang_tieu_thu' => 'required',
-            'ngay_bao_duong_gan_nhat' => 'required|date_format:d/m/Y',
-            'han_dang_kiem_tiep_theo' => 'required|date_format:d/m/Y',
-            'ngay_sua_chua_lon_gan_nhat' => 'required|date_format:d/m/Y',
+            'ngay_bao_duong_gan_nhat' => 'required',
+            'han_dang_kiem_tiep_theo' => 'required',
             'anh_xe' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
             'location' => 'required',
             'lat_location' => 'required',
             'long_location' => 'required',
-            'theo_doi_vi_tri' => 'required',
         ]);
 
         if ($request->hasFile('anh_xe') && $request->file('anh_xe')->isValid()) {
@@ -47,13 +42,11 @@ class CarsController extends Controller
             $car->so_khung = $request->so_khung;
             $car->so_cho = $request->so_cho;
             $car->so_dau_xang_tieu_thu = $request->so_dau_xang_tieu_thu;
-            $car->ngay_bao_duong_gan_nhat = Carbon::createFromFormat('d/m/Y',$request->ngay_bao_duong_gan_nhat)->format('Y-m-d');
-            $car->han_dang_kiem_tiep_theo = Carbon::createFromFormat('d/m/Y',$request->han_dang_kiem_tiep_theo)->format('Y-m-d');
-            $car->ngay_sua_chua_lon_gan_nhat = Carbon::createFromFormat('d/m/Y',$request->ngay_sua_chua_lon_gan_nhat)->format('Y-m-d');
+            $car->ngay_bao_duong_gan_nhat = $request->ngay_bao_duong_gan_nhat;
+            $car->han_dang_kiem_tiep_theo = $request->han_dang_kiem_tiep_theo;
             $car->location = $request->location;
             $car->lat_location = $request->lat_location;
             $car->long_location = $request->long_location;
-            $car->theo_doi_vi_tri = $request->theo_doi_vi_tri;
             $car->anh_xe = $file_path;
 
             $car->save();
@@ -78,11 +71,10 @@ class CarsController extends Controller
                 $car->anh_xe = $imageUrl;
             }
             // Thay đổi trường user_id thành tên người dùng
-            $car->user_id = $car->user?$car->user->name:null;
+            // $car->user_id = $car->user?$car->user->name:null;
             return $car;
         });
 
-        // Trả về phản hồi JSON với thông tin phân trang
         return response()->json($cars);
     }
 
@@ -106,17 +98,15 @@ class CarsController extends Controller
             'user_id' => 'required',
             'bien_so_xe' => 'required|unique:cars,bien_so_xe,' . $id . ',id',
             'so_khung' => 'required|unique:cars,so_khung,' . $id . ',id',
-            'so_may' => 'required|unique:cars,so_may,' . $id . ',id',
             'so_cho' => 'required',
             'so_dau_xang_tieu_thu' => 'required',
-            'ngay_bao_duong_gan_nhat' => 'required|date_format:d/m/Y',
-            'han_dang_kiem_tiep_theo' => 'required|date_format:d/m/Y',
-            'ngay_sua_chua_lon_gan_nhat' => 'required|date_format:d/m/Y',
+            'ngay_bao_duong_gan_nhat' => 'required',
+            'han_dang_kiem_tiep_theo' => 'required',
             'anh_xe' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'location' => 'required',
             'lat_location' => 'required',
             'long_location' => 'required',
-            'theo_doi_vi_tri' => 'required',
+
         ]);
 
         $car = Car::find($id);
@@ -127,13 +117,11 @@ class CarsController extends Controller
         $car->so_khung = $request->so_khung;
         $car->so_cho = $request->so_cho;
         $car->so_dau_xang_tieu_thu = $request->so_dau_xang_tieu_thu;
-        $car->ngay_bao_duong_gan_nhat = Carbon::createFromFormat('d/m/Y',$request->ngay_bao_duong_gan_nhat)->format('Y-m-d');
-        $car->han_dang_kiem_tiep_theo = Carbon::createFromFormat('d/m/Y',$request->han_dang_kiem_tiep_theo)->format('Y-m-d');
-        $car->ngay_sua_chua_lon_gan_nhat = Carbon::createFromFormat('d/m/Y',$request->ngay_sua_chua_lon_gan_nhat)->format('Y-m-d');
+        $car->ngay_bao_duong_gan_nhat = $request->ngay_bao_duong_gan_nhat;
+        $car->han_dang_kiem_tiep_theo = $request->han_dang_kiem_tiep_theo;
         $car->location = $request->location;
         $car->lat_location = $request->lat_location;
         $car->long_location = $request->long_location;
-        $car->theo_doi_vi_tri = $request->theo_doi_vi_tri;
 
         if ($request->hasFile('anh_xe')) {
             $file_name = $request->file('anh_xe')->getClientOriginalName();
@@ -167,8 +155,4 @@ class CarsController extends Controller
 
         return response()->json($data);
     }
-
-   
-
-    
 }
